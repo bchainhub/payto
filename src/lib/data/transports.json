@@ -1,0 +1,35 @@
+{
+  "ican": [{
+    "value": "xcb",
+    "label": "Core【XCB】"
+  }, {
+    "value": "btc",
+    "label": "Bitcoin【BTC】"
+  }, {
+    "value": "eth",
+    "label": "Ethereum【ETH】"
+  }, {
+    "value": "ltc",
+    "label": "Litecoin【LTC】"
+  }, {
+    "value": "xmr",
+    "label": "Monero【XMR】"
+  }, {
+    "value": "other",
+    "label": "Other"
+  }],
+  "iban": [{
+    "value": "bic",
+    "label": "BIC / Swift"
+  }],
+  "void": [{
+    "value": "geodd",
+    "label": "Geolocation (Decimal Degrees)"
+  }, {
+    "value": "plus",
+    "label": "Plus Code"
+  }, {
+    "value": "other",
+    "label": "Other"
+  }]
+}
