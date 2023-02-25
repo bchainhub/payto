@@ -1,15 +1,15 @@
 <script>
-	import './styles.css';
-	import Header from './Header.svelte';
-	import Footer from './Footer.svelte';
+	import '../app.postcss';
+
+	import { Header, Footer } from './components';
 </script>
 
-<div class="app has-sticky-footer">
+<article class="[ flex flex-col ] [ is-full ]">
 	<Header />
 
-	<main>
+	<main class="[ lg:pli-8 ]">
 		<slot />
 	</main>
 
 	<Footer />
-</div>
+</article>

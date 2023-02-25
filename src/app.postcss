@@ -1,0 +1,29 @@
+@import '@cryptohub/coco/dist/css/coco.min.css';
+
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	height: -webkit-fill-available;
+	-webkit-tap-highlight-color: transparent;
+	color-scheme: dark;
+	@apply bg-gray-900 text-gray-50;
+}
+
+::selection {
+	@apply bg-green-900 text-gray-50;
+}

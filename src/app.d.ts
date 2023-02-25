@@ -7,3 +7,16 @@ declare namespace App {
 	// interface PageData {}
 	// interface Platform {}
 }
+
+type ITransitionType = 'ican' | 'iban' | 'bic' | 'upi' | 'void';
+
+interface IPayload {
+	placeholder: string;
+	value: string | undefined;
+}
+
+interface IOutput {
+	label: string;
+	value: string;
+	previewable?: boolean;
+}

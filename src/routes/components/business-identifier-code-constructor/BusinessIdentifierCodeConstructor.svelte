@@ -1,0 +1,58 @@
+<script lang="ts">
+	import { join } from '$lib/helpers/join.helper';
+	import { constructor } from '$lib/store/constructor.store';
+	import { fly } from 'svelte/transition';
+</script>
+
+<div class="[ flex flex-col gap-6 ]" in:fly={{ y: 64 }}>
+	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
+		<label id="bic-label" for="bic">BIC</label>
+		<input
+			class={join(
+				'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
+				'[ focus:outline-none focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 focus-visible:ring-offset-green-700 focus-visible:ring-offset-2 ]',
+				'[ sm:text-sm ]'
+			)}
+			type="text"
+			id="bic"
+			placeholder="e.g. SOGEDEFFXXX"
+			autocomplete="off"
+			aria-labelledby="bic-label"
+			bind:value={$constructor.bic.bic}
+		/>
+	</div>
+
+	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
+		<label id="amount-label" for="amount">Amount</label>
+		<input
+			class={join(
+				'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
+				'[ focus:outline-none focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 focus-visible:ring-offset-green-700 focus-visible:ring-offset-2 ]',
+				'[ sm:text-sm ]'
+			)}
+			type="text"
+			id="amount"
+			placeholder="e.g. 7.10"
+			aria-labelledby="amount-label"
+			bind:value={$constructor.bic.params.amount.value}
+		/>
+		<small class="[ -mbs-1 text-gray-400 ]"> Empty value uses the network currency </small>
+	</div>
+
+	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
+		<label id="currency-label" for="currency">Currency</label>
+		<input
+			class={join(
+				'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
+				'[ focus:outline-none focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 focus-visible:ring-offset-green-700 focus-visible:ring-offset-2 ]',
+				'[ sm:text-sm ]'
+			)}
+			type="text"
+			id="currency"
+			placeholder="e.g. EUR"
+			autocomplete="off"
+			aria-labelledby="currency-label"
+			bind:value={$constructor.bic.params.currency.value}
+		/>
+	</div>
+</div>
