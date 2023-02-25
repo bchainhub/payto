@@ -1,334 +1,167 @@
-<svelte:head>
-	<title>Payto:// — The Payto money URI generator</title>
-	<meta name="description" content="The Payto money URI scheme generator." />
-	<meta property="twitter:title" content="Payto:// — The Payto money URI generator" />
-	<meta property="twitter:description" content="The Payto URI scheme generator." />
-	<meta property="twitter:image" content="https://Payto.money/icons/android-chrome-512x512.png" />
-	<meta property="og:title" content="Payto:// — The Payto money URI generator" />
-	<meta property="og:description" content="The Payto money URI scheme generator." />
-	<meta property="og:image" content="https://Payto.money/icons/android-chrome-512x512.png" />
-</svelte:head>
+<script lang="ts">
+	import toast, { Toaster } from 'svelte-french-toast';
 
-<script>
-	import types from '$lib/data/types.json';
-	import transport from '$lib/data/transports.json';
-	import dest from '$lib/data/destinations.json';
-	import { page } from '$app/stores';
-	import Radio from '$lib/Radio.svelte';
-	import Select from '$lib/Select.svelte';
+	import {
+		Box,
+		BoxContent,
+		BoxTitle,
+		Page,
+		Tab,
+		TabGroup,
+		TabList,
+		TabPanel,
+		TabPanels
+	} from '$lib/components';
 
-	let typeValue = types[0].value;
-	let typeName = types[0].label;
-	let transportValue = transport[typeValue][0].value;
-	let property = `${types[0].value}:`;
-	let host = ``;
-	let pointer = [];
-	let network = ``;
-	let destination = ``;
-	let currency = ``;
-	let amount = ``;
-	let message = ``;
-	let receiverName = ``;
-	let note = ``;
+	import {
+		InternationalCryptoAccountNumberConstructor,
+		BusinessIdentifierCodeConstructor,
+		InternationalBankAccountNumberConstructor,
+		UnifiedPaymentsInterfaceConstructor,
+		VoidPaymentTargetConstructor
+	} from './components';
 
-	function url(protocol = 'payto', hostname = '', path = [], query) {
-		let qu = '';
-		let pa = '';
-		for (let i = 0; i < path.length; i++) {
-			if (path[i] && i === path.length-1) {
-				pa = pa + encodeURIComponent(path[i]);
-			} else if (path[i]) {
-				pa = pa + encodeURIComponent(path[i]) + '/';
-			}
-		}
-		if (typeof query === 'object' && !Array.isArray(query) && query !== null) {
-			let rq = [];
-			for (let q in query) {
-				if(query[q]) {
-					rq.push(encodeURIComponent(q) + '=' + encodeURIComponent(query[q]));
-				}
-			}
-			if(rq.length>0) {
-				qu = '?' + rq.join('&');
-			}
-		}
-		let url = protocol + '://' + encodeURIComponent(hostname) + '/' + pa + qu;
-		return url;
-	}
+	import { TYPES } from '$lib/data/types.data';
+	import { join } from '$lib/helpers/join.helper';
+	import { Icon } from '$lib/icons';
+	import { constructor } from '$lib/store/constructor.store';
 
-	function txtContent(data) {
-		let txre = '';
-		let txrt = [];
-		for (let q in data) {
-			if(data[q]) {
-				txrt.push(encodeURIComponent(q) + '=' + encodeURIComponent(data[q]));
-			}
-		}
-		if(txrt.length>0) {
-			txre = txrt.join(';') + ';';
-		}
-		return txre;
-	}
+	let type: ITransitionType = TYPES[0].value;
+	$: outputs = constructor.build(type);
 
-	function handleSubmit() {
-		alert(`ok`);
-	}
+	const handleOnCopy = async (ev) => {
+		await window.navigator.clipboard.writeText(ev.currentTarget.dataset.value);
 
-	$: if (typeValue === 'ican') {
-		pointer = [destination];
-		if (transportValue) {
-			if (currency) {
-				property = `ican:${network}:${currency.toLowerCase()}`;
-				host = network;
-				note = `on ${network.toUpperCase()} with ${currency.toUpperCase()}`;
-			} else {
-				property = `ican:${network}`;
-				host = `${network}`;
-				note = `with ${network.toUpperCase()}`;
-			}
-		} else {
-			property = `ican`;
-			host = `ican`;
-		}
-	} else if (typeValue === 'iban') {
-		if (transportValue) {
-			host = `iban`;
-			pointer = [network, destination];
-			if (currency) {
-				property = `iban:${network}:${currency.toLowerCase()}`;
-				note = `on IBAN with ${currency.toUpperCase()}`;
-			} else {
-				property = `iban:${network}`;
-				note = `with IBAN`;
-			}
-		} else {
-			pointer = [destination];
-			property = `iban`;
-			host = `iban`;
-		}
-	} else if (typeValue === 'void') {
-		property = typeValue;
-		host = typeValue;
-		note = `with CASH`;
-	} else {
-		property = typeValue;
-		host = typeValue;
-		note = `with ${typeValue.toUpperCase()}`;
-	}
-
-	$: if (transportValue === 'other' || transportValue === 'none') {
-		network = '';
-	} else {
-		network = transportValue;
-	}
-
-	$: transports = transport[typeValue];
-	$: destName = dest[typeValue].name;
-	$: destPlaceholder = dest[typeValue].placeholder;
-
-	$: link = url('payto', host, pointer);
-	$: name = `Pay ${note}`;
-	$: donateName = `Donate ${note}`;
-	$: markdown = `[${name}](${link})`;
-	$: htmlLink = `<a href="${link}">${name}</a>`;
-	$: paymentButton = `<a href="${link}" style="display:inline-block;background-color:#74ae51;color:#f2fbec;text-decoration:none;padding:.5em 1.3em .5em .7em;border:3px #95c678 solid;border-left: 10px #95c678 solid;border-radius:4px 9999px 9999px 4px;font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;">💸&#8192;${name}</a>`;
-	$: donationButton = `<a href="${link}" style="display:inline-block;background-color:#b99e4f;color:#f2fbec;text-decoration:none;padding:.5em 1.3em .5em .7em;border:3px #e6c565 solid;border-left: 10px #e6c565 solid;border-radius:4px 9999px 9999px 4px;font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;">🎁&#8192;${donateName}</a>`;
-	$: metaTag = `<meta property="${property}" content="${destination}" />`;
-	$: txtRecord = txtContent();
+		toast.success('Copied to clipboard', {
+			className: '!text-gray-50 !bg-gray-700',
+			style: '--color-background: #374151'
+		});
+	};
 </script>
 
-<div class="container">
-	<div class="box">
-		<form on:submit|preventDefault={handleSubmit}>
-			<h2 class="is-size-3">Payment constructor</h2>
-			<div class="field">
-				<div class="label">Type</div>
-				<Radio {types} bind:typeSelected={typeValue}/>
-			</div>
+<Toaster />
 
-			<div class="field">
-				<label class="label" for="network">Transport network</label>
-				<div class="field has-addons">
-					<div class="control has-icons-left">
-						<Select {transports} bind:transportSelected={transportValue}/>
-						<span class="icon is-left">
-							<em class="oji">⛓️</em>
-						</span>
-					</div>
-					<div class="control has-icons-right is-fullwidth">
-						<input id="network" bind:value={network} class="input is-rounded is-uppercase" type="text" placeholder={transportValue} disabled={(typeValue === 'ican' && transportValue !== 'other')} />
-						<span class="icon is-right"><em class="oji grayscale">✅</em></span>
-					</div>
-				</div>
-			</div>
+<Page>
+	<Box>
+		<BoxTitle>Payment Constructor</BoxTitle>
 
-			<div class="field">
-				<label class="label" for="destination">{destName}</label>
-				<div class="control has-icons-right">
-					<input id="destination" bind:value={destination} class="input is-rounded" type="text" placeholder={destPlaceholder} />
-					<span class="icon is-right"><em class="oji grayscale">✅</em></span>
-				</div>
-			</div>
+		<BoxContent>
+			<TabGroup on:change={(ev) => (type = TYPES[ev.detail].value)}>
+				<TabList>
+					<Tab>ICAN</Tab>
+					<Tab>IBAN</Tab>
+					<Tab>BIC</Tab>
+					<Tab>UPI</Tab>
+					<Tab>CASH</Tab>
+				</TabList>
 
-			{#if (typeValue === 'iban') || (typeValue === 'upi') || (typeValue === 'void')}
-			<div class="field">
-				<label class="label" for="destination">Receiver name</label>
-				<div class="control">
-					<input id="receiver-name" bind:value={receiverName} class="input is-rounded" type="text" placeholder="Receiver name" />
-				</div>
-			</div>
-			{/if}
+				<TabPanels>
+					<TabPanel>
+						<InternationalCryptoAccountNumberConstructor />
+					</TabPanel>
 
-			{#if (typeValue === 'iban') || (typeValue === 'upi') || (typeValue === 'void')}
-			<div class="field">
-				<label class="label" for="destination">Message</label>
-				<div class="control">
-					<input id="message" bind:value={message} class="input is-rounded" type="text" placeholder="Message for recipient" />
-				</div>
-			</div>
-			{/if}
+					<TabPanel>
+						<InternationalBankAccountNumberConstructor />
+					</TabPanel>
 
-			<div class="columns">
+					<TabPanel>
+						<BusinessIdentifierCodeConstructor />
+					</TabPanel>
 
-				<div class="column">
-					<div class="field">
-						<label class="label" for="currency">Currency / Token</label>
-						<div class="control">
-							<input id="currency" bind:value={currency} class="input is-rounded is-uppercase" type="text" placeholder="Currency" />
+					<TabPanel>
+						<UnifiedPaymentsInterfaceConstructor />
+					</TabPanel>
+
+					<TabPanel>
+						<VoidPaymentTargetConstructor />
+					</TabPanel>
+				</TabPanels>
+			</TabGroup>
+
+			<button
+				class={join(
+					'[ is-full bs-12 mbs-auto plb-2 pli-3 text-center text-white border border-gray-700 bg-gray-700 rounded-md transition-all duration-200 outline-none ]',
+					'[ focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 focus-visible:ring-offset-green-700 focus-visible:ring-offset-2 ]',
+					'[ active:scale-[.99] ]',
+					'[ sm:text-sm ]'
+				)}
+				type="button"
+				on:pointerdown={constructor.reset(type)}
+			>
+				Clear
+			</button>
+		</BoxContent>
+	</Box>
+
+	<Icon.Convert
+		class="[ bs-10 is-10 self-center text-green-500 rotate-90 ] [ lg:block lg:rotate-0 ]"
+	/>
+
+	<Box>
+		<BoxTitle>Integrations</BoxTitle>
+
+		<BoxContent>
+			<div class="[ flex flex-col gap-6 ]">
+				{#each $outputs as output, index}
+					<div class="[ flex flex-col items-stretch gap-2 ]">
+						<label for={'value of ' + index}>{output.label}</label>
+						<div
+							class={join(
+								'[ flex items-center justify-between ]',
+								'[ relative is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none ]',
+								'[ sm:text-sm ]'
+							)}
+						>
+							<input
+								class={join(
+									'[ appearance-none bg-transparent border-0 is-full pie-14 ]',
+									'[ focus-visible:ring-0 ]'
+								)}
+								type="text"
+								value={output.value}
+								readonly
+								id={'value of ' + index}
+							/>
+							<button
+								class={join(
+									'[ flex items-center justify-between ]',
+									'[ absolute inline-end-0 mli-3 p-2 text-gray-50 bg-gray-700 rounded-full outline-none transition-all duration-200 ]',
+									'[ focus-visible:bg-green-900 focus-visible:text-green-50 active:scale-95 ]'
+								)}
+								type="button"
+								title="Copy to clipboard"
+								data-value={output.value}
+								on:pointerdown={handleOnCopy}
+							>
+								<svg
+									class={join('[ bs-5 is-5 ]')}
+									fill="none"
+									stroke="currentColor"
+									stroke-width="1.5"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+									aria-hidden="true"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z"
+									/>
+								</svg>
+							</button>
 						</div>
-						<p class="help">Empty value uses the network currency.</p>
+
+						{#if output.previewable}
+							<div class="[ flex flex-col items-stretch gap-2 ]">
+								<label class="[ text-gray-300 text-sm uppercase ]" for={'preview of ' + index}>
+									preview
+								</label>
+								<output id={'preview of ' + index}>{@html output.value}</output>
+							</div>
+						{/if}
 					</div>
-				</div>
-
-				<div class="column is-four-fifths">
-					<div class="field">
-						<label class="label" for="amount">Amount</label>
-						<div class="control has-icons-right">
-							<input id="amount" bind:value={amount} class="input is-rounded" type="number" inputmode="numeric" placeholder="0.00" step="0.01" pattern="\d*\.*" />
-							<span class="icon is-right"><em class="oji grayscale">✅</em></span>
-						</div>
-					</div>
-				</div>
-
+				{/each}
 			</div>
-
-			<button type="submit" class="button is-link is-primary">Copy link</button>
-			<!--label for="pay" class="button is-link is-warning">Switch to payment</label-->
-			<button type="reset" class="button is-light is-danger">Clear data</button>
-		</form>
-	</div>
-</div>
-
-<div class="container">
-	<div class="box">
-		<h2 class="is-size-3">Payto integrations</h2>
-
-		<div class="field">
-			<label class="label" for="result-link">Link</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-link" class="input is-rounded" type="text" value={link} readonly />
-				</div>
-			</div>
-		</div>
-
-		<div class="field">
-			<label class="label" for="result-markdown">Markdown</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-markdown" class="input is-rounded" type="text" value={markdown} readonly />
-				</div>
-			</div>
-		</div>
-
-		<div class="field">
-			<label class="label" for="result-html">HTML link</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-html" class="input is-rounded" type="text" value={htmlLink} readonly />
-				</div>
-			</div>
-		</div>
-
-		<div class="field">
-			<label class="label" for="result-meta">Payment button — HTML</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-meta" class="input is-rounded" type="text" value={paymentButton} readonly />
-				</div>
-			</div>
-		</div>
-		<div class="block preview">
-			<div class="is-size-7 is-uppercase">Preview</div>
-			<div>{@html paymentButton}</div>
-		</div>
-
-		<div class="field">
-			<label class="label" for="result-meta">Donation button — HTML</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-meta" class="input is-rounded" type="text" value={donationButton} readonly />
-				</div>
-			</div>
-		</div>
-		<div class="block preview">
-			<div class="is-size-7 is-uppercase">Preview</div>
-			<div>{@html donationButton}</div>
-		</div>
-
-		<div class="field">
-			<label class="label" for="result-meta">Meta tag</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-meta" class="input is-rounded" type="text" value={metaTag} readonly />
-				</div>
-			</div>
-		</div>
-
-		<hr />
-
-		<h6 class="has-text-weight-bold">TXT record</h6>
-
-		<div class="field">
-			<label class="label has-text-weight-normal" for="result-meta">Name</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-meta" class="input is-rounded" type="text" value="payto" readonly />
-				</div>
-			</div>
-		</div>
-		<div class="field">
-			<label class="label has-text-weight-normal" for="result-meta">Content</label>
-			<div class="field has-addons">
-				<div class="control">
-					<button class="button">📋 Copy</button>
-				</div>
-				<div class="control is-fullwidth">
-					<input id="result-meta" class="input is-rounded" type="text" value={txtRecord} readonly />
-				</div>
-			</div>
-		</div>
-
-	</div>
-</div>
+		</BoxContent>
+	</Box>
+</Page>
