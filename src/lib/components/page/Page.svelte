@@ -1,12 +1,12 @@
 <svelte:head>
-	<title>Payto:// — The Payto money URI generator</title>
-	<meta name="description" content="The Payto money URI scheme generator." />
-	<meta property="twitter:title" content="Payto:// — The Payto money URI generator" />
-	<meta property="twitter:description" content="The Payto URI scheme generator." />
-	<meta property="twitter:image" content="https://Payto.money/icons/android-chrome-512x512.png" />
-	<meta property="og:title" content="Payto:// — The Payto money URI generator" />
-	<meta property="og:description" content="The Payto money URI scheme generator." />
-	<meta property="og:image" content="https://Payto.money/icons/android-chrome-512x512.png" />
+	<title>Payto Money — Decentralized transfer of the Assets</title>
+	<meta name="description" content="The Payto URI generator to transfer Assets decentralized via the link or redirect." />
+	<meta property="twitter:title" content="Payto Money — Decentralized transfer of the Assets" />
+	<meta property="twitter:description" content="The Payto URI generator to transfer Assets decentralized via the link or redirect." />
+	<meta property="twitter:image" content="https://payto.money/icons/android-chrome-512x512.png" />
+	<meta property="og:title" content="Payto Money — Decentralized transfer of the Assets" />
+	<meta property="og:description" content="The Payto URI generator to transfer Assets decentralized via the link or redirect." />
+	<meta property="og:image" content="https://payto.money/icons/android-chrome-512x512.png" />
 </svelte:head>
 
 <div

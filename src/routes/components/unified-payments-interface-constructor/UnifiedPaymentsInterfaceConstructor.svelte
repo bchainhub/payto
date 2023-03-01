@@ -15,15 +15,15 @@
 	<FieldGroup>
 		<FieldGroupLabel>Account Alias *</FieldGroupLabel>
 		<FieldGroupText
-			placeholder="e.g. julia@example.com"
+			placeholder="e.g. john.doe@gmail.com"
 			bind:value={$constructor.upi.accountAlias}
 		/>
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>Receiver Name *</FieldGroupLabel>
+		<FieldGroupLabel>Beneficiary Full Name</FieldGroupLabel>
 		<FieldGroupText
-			placeholder="e.g. Julia"
+			placeholder="e.g. John Doe"
 			bind:value={$constructor.upi.params.receiverName.value}
 		/>
 	</FieldGroup>
@@ -31,19 +31,19 @@
 	<FieldGroup>
 		<FieldGroupLabel>Message</FieldGroupLabel>
 		<FieldGroupText
-			placeholder="e.g. Hi from PAYTO"
+			placeholder="e.g. ID001"
 			bind:value={$constructor.upi.params.message.value}
 		/>
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Amount</FieldGroupLabel>
-		<FieldGroupNumber placeholder="e.g. 7.10" bind:value={$constructor.upi.params.amount.value} />
-		<FieldGroupAppendix>Empty value uses the network currency</FieldGroupAppendix>
+		<FieldGroupNumber placeholder="e.g. 3.14" bind:value={$constructor.upi.params.amount.value} />
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Currency</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. XCB" bind:value={$constructor.upi.params.currency.value} />
+		<FieldGroupText placeholder="e.g. USD; EUR" bind:value={$constructor.upi.params.currency.value} />
+		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
 </div>

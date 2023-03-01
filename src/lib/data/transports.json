@@ -33,7 +33,7 @@
 	],
 	"void": [
 		{
-			"value": "geodd",
+			"value": "geo",
 			"label": "Geolocation (Decimal Degrees)"
 		},
 		{

@@ -47,7 +47,7 @@ export const TRANSPORT = {
 	],
 	void: [
 		{
-			value: 'geodd',
+			value: 'geo',
 			label: 'Geolocation (Decimal Degrees)',
 			symbol: ''
 		},
