@@ -9,7 +9,7 @@ import { META_CONTENT } from '$lib/data/meta-content.data';
 const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 	let link = payload
 		.filter((payload) => payload.value !== undefined)
-		.reduce((acc, payload) => acc.concat('/', payload.value || payload.placeholder), 'payto::/');
+		.reduce((acc, payload) => acc.concat('/', payload.value || payload.placeholder), 'payto:/');
 
 	if (props.params) {
 		const { amount, currency, ...rest } = props.params;
@@ -22,12 +22,12 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 		if (amount.value || amount.mandatory) {
 			searchParams.set(
 				'amount',
-				currency.value ? currency.value + ':' + amount.value : amount.value
+				currency.value ? currency.value.toUpperCase() + ':' + amount.value : amount.value
 			);
 		}
 
 		if (searchParams.toString()) {
-			link += '?' + searchParams.toString();
+			link += '?' + searchParams.toString().replace(/%3A/g,':');
 		}
 	}
 
@@ -55,7 +55,7 @@ const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
  * @param props - The props object that was used to initialized store.
  */
 const generateMarkDown = (link: string, props: Record<string, any>) => {
-	return `[${getTitle('Pay', props)}}](${link})`;
+	return `[${getTitle('Pay', props)}](${link})`;
 };
 
 /**
@@ -77,16 +77,17 @@ const generateHtmlLink = (link: string, props: Record<string, any>) => {
  */
 const generateHtmlPaymentButton = (link: string, props: Record<string, any>) => {
 	const style = `
-    display: inline-block;
-    background-color: #74ae51;
-    color: #f2fbec;
-    text-decoration: none;
-    padding: .5em 1.3em .5em .7em;
-    border: 3px #95c678 solid;
-    border-left: 10px #95c678 solid;
-    border-radius: 4px 9999px 9999px 4px;
-    font-family: BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-  `;
+display:inline-block;
+background-color:#518842;
+color:#d3fbc9;
+text-decoration:none;
+font-weight:500;
+padding:.5em 1.3em .5em .7em;
+border:3px #77bb65 solid;
+border-left:10px #77bb65 solid;
+border-radius:4px 9999px 9999px 4px;
+font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+`;
 
 	return `<a href="${link}" style="${style}">💸&#8192;${getTitle('Pay', props)}</a>`;
 };
@@ -100,16 +101,17 @@ const generateHtmlPaymentButton = (link: string, props: Record<string, any>) => 
  */
 const generateHtmlDonationButton = (link: string, props: Record<string, any>) => {
 	const style = `
-    display: inline-block;
-    background-color: #b99e4f;
-    color: #f2fbec;
-    text-decoration: none;
-    padding: .5em 1.3em .5em .7em;
-    border: 3px #e6c565 solid;
-    border-left:  10px #e6c565 solid;
-    border-radius: 4px 9999px 9999px 4px;
-    font-family: BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-  `;
+display:inline-block;
+background-color:#aa8c2c;
+color:#f7ebc9;
+text-decoration:none;
+font-weight:500;
+padding:.5em 1.3em .5em .7em;
+border:3px #ddbf5f solid;
+border-left:10px #ddbf5f solid;
+border-radius:4px 9999px 9999px 4px;
+font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+`;
 
 	return `<a href="${link}" style="${style}">🎁&#8192;${getTitle('Donate', props)}</a>`;
 };
@@ -121,7 +123,23 @@ const generateHtmlDonationButton = (link: string, props: Record<string, any>) =>
  * @returns A string of HTML that will be used to create a meta tag.
  */
 const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
-	let property = `${type}:${props.network !== 'other' ? props.network : props.other}`;
+	let property = `${type}`;
+	if (type === 'ican' && props.network) {
+		if(props.network !== 'other') {
+			property += `:${props.network}`;
+		} else {
+			property += `:${props.other}`;
+		}
+	} else if (type === 'iban' && props.bic) {
+		property += `:${props.bic}`;
+	} else if (type === 'void') {
+		if(props.network !== 'other') {
+			property += `:${props.network}`;
+		} else {
+			property += `:${props.other}`;
+		}
+	}
+
 	if (props.params.currency.value) {
 		property += `:${props.params.currency.value.toLowerCase()}`;
 	}

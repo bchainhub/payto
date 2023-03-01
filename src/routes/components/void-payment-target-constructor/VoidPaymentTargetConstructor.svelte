@@ -88,7 +88,7 @@
 						)}
 						type="button"
 						title="Back to network menu options"
-						on:pointerdown={() => ($constructor.void.network = 'geodd')}
+						on:pointerdown={() => ($constructor.void.network = 'geo')}
 					>
 						<svg
 							class={join('[ bs-4 is-4 ]')}
@@ -127,7 +127,7 @@
 
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
 		<label id="exchange-point-label" for="exchange-point">Exchange Point</label>
-		{#if $constructor.void.network === 'geodd'}
+		{#if $constructor.void.network === 'geo'}
 			<div class="[ flex gap-4 ]">
 				<input
 					class={join(
@@ -155,6 +155,7 @@
 					bind:value={$constructor.void.exchangePoint.long}
 				/>
 			</div>
+			<small class="[ -mbs-1 text-gray-400 ]">Search for the geocordinates - <a class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]" href="https://gps-coordinates.org/" target="_blank" rel="noreferrer">Latitude & Longitude (DD - Decimal Degrees)</a></small>
 		{/if}
 
 		{#if $constructor.void.network === 'plus'}
@@ -166,11 +167,12 @@
 				)}
 				type="text"
 				id="exchange-point"
-				placeholder="plus"
+				placeholder="Plus Code, e.g. Q2PP+9X"
 				autocomplete="off"
 				aria-labelledby="exchange-point-label"
 				bind:value={$constructor.void.exchangePoint.plus}
 			/>
+			<small class="[ -mbs-1 text-gray-400 ]">Search for the <a class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]" href="https://plus.codes/map" target="_blank" rel="noreferrer">Plus Code</a></small>
 		{/if}
 
 		{#if $constructor.void.network === 'other'}
@@ -191,29 +193,29 @@
 	</div>
 
 	<FieldGroup>
-		<FieldGroupLabel>Receiver Name</FieldGroupLabel>
+		<FieldGroupLabel>Beneficiary Full Name</FieldGroupLabel>
 		<FieldGroupText
-			placeholder="e.g. Julia"
+			placeholder="e.g. John Doe"
 			bind:value={$constructor.void.params.receiverName.value}
 		/>
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>Message</FieldGroupLabel>
+		<FieldGroupLabel>Message for Beneficiary</FieldGroupLabel>
 		<FieldGroupText
-			placeholder="e.g. Hi from PAYTO"
+			placeholder="e.g. ID001"
 			bind:value={$constructor.void.params.message.value}
 		/>
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Amount</FieldGroupLabel>
-		<FieldGroupNumber placeholder="e.g. 7.10" bind:value={$constructor.void.params.amount.value} />
-		<FieldGroupAppendix>Empty value uses the network currency</FieldGroupAppendix>
+		<FieldGroupNumber placeholder="e.g. 3.14" bind:value={$constructor.void.params.amount.value} />
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Currency</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. XCB" bind:value={$constructor.void.params.currency.value} />
+		<FieldGroupText placeholder="e.g. XCB; USD" bind:value={$constructor.void.params.currency.value} />
+		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
 </div>

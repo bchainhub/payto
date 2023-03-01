@@ -15,15 +15,23 @@ html {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
+	@apply bg-gray-900;
 }
 
 body {
 	height: -webkit-fill-available;
 	-webkit-tap-highlight-color: transparent;
 	color-scheme: dark;
-	@apply bg-gray-900 text-gray-50;
+	@apply text-gray-50;
+	height: 100%;
+	background-image: url(tile.svg);
+	background-repeat: repeat;
 }
 
 ::selection {
 	@apply bg-green-900 text-gray-50;
+}
+
+a {
+	border-bottom: 1px dotted;
 }

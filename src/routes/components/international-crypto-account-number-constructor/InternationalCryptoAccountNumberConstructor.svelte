@@ -127,18 +127,18 @@
 	</div>
 
 	<FieldGroup>
-		<FieldGroupLabel>Destination *</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. cb00abc" bind:value={$constructor.ican.destination} />
+		<FieldGroupLabel>Address *</FieldGroupLabel>
+		<FieldGroupText placeholder="e.g. cb57bbbb54…" bind:value={$constructor.ican.destination} />
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Amount</FieldGroupLabel>
-		<FieldGroupNumber placeholder="e.g. 7.10" bind:value={$constructor.ican.params.amount.value} />
-		<FieldGroupAppendix>Empty value uses the network currency</FieldGroupAppendix>
+		<FieldGroupNumber placeholder="e.g. 3.14" bind:value={$constructor.ican.params.amount.value} />
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>Currency</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. XCB" bind:value={$constructor.ican.params.currency.value} />
+		<FieldGroupLabel>Currency / Token</FieldGroupLabel>
+		<FieldGroupText placeholder="e.g. CTN; USD" bind:value={$constructor.ican.params.currency.value} />
+		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
 </div>
