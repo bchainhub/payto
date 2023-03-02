@@ -2,13 +2,13 @@
 	<div class="[ flex flex-col items-center gap-2 ] [ container select-none ]">
 		<strong class="[ text-green-500 text-lg ]">💸 Payto Money</strong>
 
-		<p>Initiative of
+		<p>A
 			<a
 				class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
 				href="https://github.com/cryptohub-digital"
 				target="_blank"
 				rel="noreferrer"
-			>CRYPTO ▪ HUB</a>. // Licensed under the
+			>CRYPTO ▪ HUB</a> Initiative. // Licensed under the
 			<a
 				class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
 				href="https://github.com/cryptohub-digital/core-license/blob/master/LICENSE"
