@@ -12,6 +12,6 @@
 			<span class="[ font-bold ]">💸 Payto</span>
 			<span>Money</span>
 		</h1>
-		<span class="[ text-gold-light ]">Decentralized transfer of the Assets</span>
+		<span class="[ text-gold-light ]">Decentralized transfer of Assets</span>
 	</div>
 </header>

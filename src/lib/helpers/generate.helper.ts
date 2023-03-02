@@ -41,7 +41,7 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
  */
 const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
 	const network = props.network !== 'other' ? props.network : props.other;
-	let title = `${prefix} on ${network.toUpperCase()}`;
+	let title = `${prefix} via ${network.toUpperCase()}`;
 	if (props.params.currency.value) {
 		title += ` with ${props.params.currency.value.toUpperCase()}`;
 	}

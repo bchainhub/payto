@@ -1,6 +1,6 @@
 # Payto Money
 
-> Decentralized transfer of the Assets
+> Decentralized transfer of Assets
 
 The 'payto' URI Scheme builder for Payments per [RFC 8905](https://datatracker.ietf.org/doc/rfc8905/) and additions.
 
