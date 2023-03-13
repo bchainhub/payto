@@ -39,7 +39,7 @@
 	</div>
 
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
-		<label id="currency-label" for="currency">FIAT Currency</label>
+		<label id="currency-label" for="currency">FIAT Currency code</label>
 		<input
 			class={join(
 				'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',

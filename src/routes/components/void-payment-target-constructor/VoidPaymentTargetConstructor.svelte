@@ -214,7 +214,7 @@
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>Currency</FieldGroupLabel>
+		<FieldGroupLabel>Currency code</FieldGroupLabel>
 		<FieldGroupText placeholder="e.g. XCB; USD" bind:value={$constructor.void.params.currency.value} />
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>

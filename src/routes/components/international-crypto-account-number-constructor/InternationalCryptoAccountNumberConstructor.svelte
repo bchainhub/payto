@@ -137,8 +137,8 @@
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>Currency / Token</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. CTN; USD" bind:value={$constructor.ican.params.currency.value} />
+		<FieldGroupLabel>Currency code / Token code / Token address</FieldGroupLabel>
+		<FieldGroupText placeholder="e.g. USD; CTN; 0x1ab…" bind:value={$constructor.ican.params.currency.value} />
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
 </div>
