@@ -43,7 +43,7 @@
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>FIAT Currency</FieldGroupLabel>
+		<FieldGroupLabel>FIAT Currency code</FieldGroupLabel>
 		<FieldGroupText placeholder="e.g. USD; EUR" bind:value={$constructor.iban.params.currency.value} />
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
