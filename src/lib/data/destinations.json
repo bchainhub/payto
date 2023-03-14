@@ -7,13 +7,13 @@
 		"name": "IBAN",
 		"placeholder": "IBAN code"
 	},
-	"bic": {
-		"name": "BIC",
-		"placeholder": "BIC code"
-	},
 	"upi": {
 		"name": "Receiver",
 		"placeholder": "Receiver alias"
+	},
+	"bic": {
+		"name": "BIC",
+		"placeholder": "BIC code"
 	},
 	"void": {
 		"name": "Exchange point",

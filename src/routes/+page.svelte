@@ -50,8 +50,8 @@
 				<TabList>
 					<Tab>ICAN</Tab>
 					<Tab>IBAN</Tab>
-					<Tab>BIC</Tab>
 					<Tab>UPI</Tab>
+					<Tab>BIC</Tab>
 					<Tab>CASH</Tab>
 				</TabList>
 
@@ -65,11 +65,11 @@
 					</TabPanel>
 
 					<TabPanel>
-						<BusinessIdentifierCodeConstructor />
+						<UnifiedPaymentsInterfaceConstructor />
 					</TabPanel>
 
 					<TabPanel>
-						<UnifiedPaymentsInterfaceConstructor />
+						<BusinessIdentifierCodeConstructor />
 					</TabPanel>
 
 					<TabPanel>

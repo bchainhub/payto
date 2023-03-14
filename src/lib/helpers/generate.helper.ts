@@ -19,10 +19,15 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 
 		const searchParams = new URLSearchParams(validParams as string[][]);
 
-		if (amount.value || amount.mandatory) {
+		if (amount.mandatory) {
 			searchParams.set(
 				'amount',
 				currency.value ? currency.value.toUpperCase() + ':' + amount.value : amount.value
+			);
+		} else if (amount.value || currency.value) {
+			searchParams.set(
+				'amount',
+				(amount.value && currency.value) ? currency.value.toUpperCase() + ':' + amount.value : (currency.value ? currency.value.toUpperCase() + ':' : amount.value)
 			);
 		}
 
@@ -141,7 +146,7 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 	}
 
 	if (props.params.currency.value) {
-		property += `:${props.params.currency.value.toLowerCase()}`;
+		property += `:${props.params.currency.value}`;
 	}
 
 	const content = META_CONTENT[type](props);
