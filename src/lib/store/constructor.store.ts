@@ -25,15 +25,6 @@ const INITIAL_STATE = {
 		}
 	},
 
-	bic: {
-		network: 'bic',
-		bic: '',
-		params: {
-			currency: { value: undefined },
-			amount: { value: undefined }
-		}
-	},
-
 	upi: {
 		network: 'upi',
 		accountAlias: '',
@@ -42,6 +33,15 @@ const INITIAL_STATE = {
 			amount: { value: undefined },
 			receiverName: { value: undefined },
 			message: { value: undefined }
+		}
+	},
+
+	bic: {
+		network: 'bic',
+		bic: '',
+		params: {
+			currency: { value: undefined },
+			amount: { value: undefined }
 		}
 	},
 
@@ -93,21 +93,6 @@ const BUILDER = {
 		return generate('iban', props, payload);
 	},
 
-	bic: (props: typeof INITIAL_STATE.bic) => {
-		const payload: IPayload[] = [
-			{
-				placeholder: '',
-				value: encodeURIComponent(props.network)
-			},
-			{
-				placeholder: '',
-				value: encodeURIComponent(props.bic)
-			}
-		];
-
-		return generate('bic', props, payload);
-	},
-
 	upi: (props: typeof INITIAL_STATE.upi) => {
 		const payload: IPayload[] = [
 			{
@@ -121,6 +106,21 @@ const BUILDER = {
 		];
 
 		return generate('upi', props, payload);
+	},
+
+	bic: (props: typeof INITIAL_STATE.bic) => {
+		const payload: IPayload[] = [
+			{
+				placeholder: '',
+				value: encodeURIComponent(props.network)
+			},
+			{
+				placeholder: '',
+				value: encodeURIComponent(props.bic)
+			}
+		];
+
+		return generate('bic', props, payload);
 	},
 
 	void: (props: typeof INITIAL_STATE.void) => {
