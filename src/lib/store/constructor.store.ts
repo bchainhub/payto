@@ -7,6 +7,7 @@ const INITIAL_STATE = {
 		network: TRANSPORT.ican[0].value,
 		other: '',
 		destination: '',
+		chain: '',
 		params: {
 			currency: { value: undefined },
 			amount: { value: undefined }
@@ -67,7 +68,7 @@ const BUILDER = {
 			},
 			{
 				placeholder: '',
-				value: encodeURIComponent(props.destination)
+				value: props.destination && props.chain && (props.network === 'eth' || props.network === 'other') > 0 ? encodeURIComponent(props.destination) + '@' + encodeURIComponent(props.chain) : encodeURIComponent(props.destination)
 			}
 		];
 
