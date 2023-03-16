@@ -22,17 +22,17 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 		if (amount.mandatory) {
 			searchParams.set(
 				'amount',
-				currency.value ? currency.value.toUpperCase() + ':' + amount.value : amount.value
+				currency.value ? currency.value + ':' + amount.value : amount.value
 			);
 		} else if (amount.value || currency.value) {
 			searchParams.set(
 				'amount',
-				(amount.value && currency.value) ? currency.value.toUpperCase() + ':' + amount.value : (currency.value ? currency.value.toUpperCase() + ':' : amount.value)
+				(amount.value && currency.value) ? currency.value + ':' + amount.value : (currency.value ? currency.value + ':' : amount.value)
 			);
 		}
 
 		if (searchParams.toString()) {
-			link += '?' + searchParams.toString().replace(/%3A/g,':');
+			link += '?' + searchParams.toString().replace(/%3A/g,':').replace(/%40/g,'@');
 		}
 	}
 
@@ -47,8 +47,16 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
 	const network = props.network !== 'other' ? props.network : props.other;
 	let title = `${prefix} via ${network.toUpperCase()}`;
+	if (props.chain > 0 && (props.network === 'eth' || props.network === 'other')) {
+		title += `@${props.chain}`;
+	}
 	if (props.params.currency.value) {
-		title += ` with ${props.params.currency.value.toUpperCase()}`;
+		if (props.params.currency.value.length > 10) {
+			title += ` with ${props.params.currency.value.slice(0,4).toUpperCase()}…${props.params.currency.value.slice(-4).toUpperCase()}`;
+		} else {
+			title += ` with ${props.params.currency.value.toUpperCase()}`;
+		}
+
 	}
 
 	return title;
@@ -131,9 +139,17 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 	let property = `${type}`;
 	if (type === 'ican' && props.network) {
 		if(props.network !== 'other') {
-			property += `:${props.network}`;
+			if(props.network === 'eth' && props.chain > 0) {
+				property += `:${props.network}@${props.chain}`;
+			} else {
+				property += `:${props.network}`;
+			}
 		} else {
-			property += `:${props.other}`;
+			if(props.chain > 0) {
+				property += `:${props.other}@${props.chain}`;
+			} else {
+				property += `:${props.other}`;
+			}
 		}
 	} else if (type === 'iban' && props.bic) {
 		property += `:${props.bic}`;

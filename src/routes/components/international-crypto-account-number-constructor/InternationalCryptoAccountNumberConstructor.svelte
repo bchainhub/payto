@@ -141,4 +141,12 @@
 		<FieldGroupText placeholder="e.g. USD; CTN; 0x1ab…" bind:value={$constructor.ican.params.currency.value} />
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
+
+	{#if $constructor.ican.network === 'eth' || $constructor.ican.network === 'other'}
+		<FieldGroup>
+			<FieldGroupLabel>Chain ID</FieldGroupLabel>
+			<FieldGroupText placeholder="e.g. 61" bind:value={$constructor.ican.chain} />
+			<FieldGroupAppendix>Empty value uses the default network chain.</FieldGroupAppendix>
+		</FieldGroup>
+	{/if}
 </div>
