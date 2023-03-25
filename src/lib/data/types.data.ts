@@ -15,6 +15,11 @@ export const TYPES = [
 		link: 'https://en.wikipedia.org/wiki/Unified_Payments_Interface'
 	},
 	{
+		value: 'ach',
+		label: 'ACH',
+		link: 'https://en.wikipedia.org/wiki/ACH_Network'
+	},
+	{
 		value: 'bic',
 		label: 'BIC',
 		link: 'https://en.wikipedia.org/wiki/ISO_9362'

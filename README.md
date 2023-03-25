@@ -4,6 +4,10 @@
 
 The 'payto' URI Scheme builder for Payments per [RFC 8905](https://datatracker.ietf.org/doc/rfc8905/) and additions.
 
+## Technical specifications and organizational notes
+
+- [RFC 8905](https://datatracker.ietf.org/doc/rfc8905/)
+
 ## Creating a project
 
 If you're seeing this, you've probably already done this step. Congrats!

@@ -37,6 +37,17 @@ const INITIAL_STATE = {
 		}
 	},
 
+	ach: {
+		network: 'ach',
+		routingNumber: '',
+		accountNumber: '',
+		params: {
+			currency: { value: undefined },
+			amount: { value: undefined },
+			receiverName: { value: undefined }
+		}
+	},
+
 	bic: {
 		network: 'bic',
 		bic: '',
@@ -68,7 +79,9 @@ const BUILDER = {
 			},
 			{
 				placeholder: '',
-				value: props.destination && props.chain && (props.network === 'eth' || props.network === 'other') > 0 ? encodeURIComponent(props.destination) + '@' + encodeURIComponent(props.chain) : encodeURIComponent(props.destination)
+				value: props.destination && props.chain && (props.network === 'eth' || props.network === 'other') > 0
+				? encodeURIComponent(props.destination) + '@' + encodeURIComponent(props.chain)
+				: encodeURIComponent(props.destination)
 			}
 		];
 
@@ -107,6 +120,25 @@ const BUILDER = {
 		];
 
 		return generate('upi', props, payload);
+	},
+
+	ach: (props: typeof INITIAL_STATE.ach) => {
+		const payload: IPayload[] = [
+			{
+				placeholder: '',
+				value: encodeURIComponent(props.network)
+			},
+			{
+				placeholder: '',
+				value: /^\d+$/.test(props.routingNumber) ? props.routingNumber : undefined
+			},
+			{
+				placeholder: '',
+				value: /^\d+$/.test(props.accountNumber) ? props.accountNumber : undefined
+			}
+		];
+
+		return generate('ach', props, payload);
 	},
 
 	bic: (props: typeof INITIAL_STATE.bic) => {
