@@ -14,6 +14,7 @@
 	} from '$lib/components';
 
 	import {
+		AutomatedClearingHouseConstructor,
 		InternationalCryptoAccountNumberConstructor,
 		BusinessIdentifierCodeConstructor,
 		InternationalBankAccountNumberConstructor,
@@ -51,6 +52,7 @@
 					<Tab>ICAN</Tab>
 					<Tab>IBAN</Tab>
 					<Tab>UPI</Tab>
+					<Tab>ACH</Tab>
 					<Tab>BIC</Tab>
 					<Tab>CASH</Tab>
 				</TabList>
@@ -66,6 +68,10 @@
 
 					<TabPanel>
 						<UnifiedPaymentsInterfaceConstructor />
+					</TabPanel>
+
+					<TabPanel>
+						<AutomatedClearingHouseConstructor />
 					</TabPanel>
 
 					<TabPanel>

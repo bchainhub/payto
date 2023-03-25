@@ -15,29 +15,51 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 		const { amount, currency, ...rest } = props.params;
 		const validParams = Object.entries<{ value: string | undefined; mandatory?: boolean }>(rest)
 			.filter(([_, param]) => param.mandatory || Boolean(param.value))
-			.map(([key, param]) => [key, param.value]);
+			.map(([key, param]) => [kebabize(key), param.value]);
 
 		const searchParams = new URLSearchParams(validParams as string[][]);
 
 		if (amount.mandatory) {
 			searchParams.set(
 				'amount',
-				currency.value ? currency.value + ':' + amount.value : amount.value
+				currency.value
+				? caseCurrency(currency.value) + ':' + amount.value
+				: amount.value
 			);
 		} else if (amount.value || currency.value) {
 			searchParams.set(
 				'amount',
-				(amount.value && currency.value) ? currency.value + ':' + amount.value : (currency.value ? currency.value + ':' : amount.value)
+				(amount.value && currency.value)
+				? caseCurrency(currency.value) + ':' + amount.value
+				: (currency.value ? caseCurrency(currency.value) + ':' : amount.value)
 			);
 		}
 
 		if (searchParams.toString()) {
-			link += '?' + searchParams.toString().replace(/%3A/g,':').replace(/%40/g,'@');
+			link += '?' + uriNormalize(searchParams.toString());
 		}
 	}
 
 	return link;
 };
+
+/**
+ * camelCase to kebab-case
+ * @param str - String to be kebabized
+ */
+const kebabize = (str) => str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? "-" : "") + $.toLowerCase());
+
+/**
+ * Convert required characters back from encodeURIComponent
+ * @param str - String to be decoded
+ */
+const uriNormalize = (str) => str.replace(/%3A/g,':').replace(/%40/g,'@');
+
+/**
+ * Convert currency to lower case except Smart Contracts
+ * @param str - String to be converted
+ */
+const caseCurrency = (str) => str.startsWith("0x") ? str : str.toLowerCase();
 
 /**
  * It takes a prefix and a props object, and returns a title
@@ -52,7 +74,11 @@ const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
 	}
 	if (props.params.currency.value) {
 		if (props.params.currency.value.length > 10) {
-			title += ` with ${props.params.currency.value.slice(0,4).toUpperCase()}…${props.params.currency.value.slice(-4).toUpperCase()}`;
+			if(props.params.currency.value.startsWith("0x")) {
+				title += ` with ${props.params.currency.value.slice(0,4)}…${props.params.currency.value.slice(-4)}`;
+			} else {
+				title += ` with ${props.params.currency.value.slice(0,4).toUpperCase()}…${props.params.currency.value.slice(-4).toUpperCase()}`;
+			}
 		} else {
 			title += ` with ${props.params.currency.value.toUpperCase()}`;
 		}
@@ -153,6 +179,8 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 		}
 	} else if (type === 'iban' && props.bic) {
 		property += `:${props.bic}`;
+	} else if (type === 'ach' && props.routingNumber) {
+		property += `:${props.routingNumber}`;
 	} else if (type === 'void') {
 		if(props.network !== 'other') {
 			property += `:${props.network}`;
