@@ -1,4 +1,5 @@
 import { META_CONTENT } from '$lib/data/meta-content.data';
+import { checkValidity } from '$lib/helpers/check-validity.helper';
 
 /**
  * It takes a list of payloads and a set of props, and returns a link
@@ -8,8 +9,8 @@ import { META_CONTENT } from '$lib/data/meta-content.data';
  */
 const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 	let link = payload
-		.filter((payload) => payload.value !== undefined)
-		.reduce((acc, payload) => acc.concat('/', payload.value || payload.placeholder), 'payto:/');
+		.filter((payload) => (payload.value !== undefined || payload.query === true))
+		.reduce((acc, payload) => acc.concat('/', payload.value || (payload.placeholder ? payload.placeholder : '')), 'payto:/');
 
 	if (props.params) {
 		const { amount, currency, ...rest } = props.params;
@@ -62,12 +63,29 @@ const uriNormalize = (str) => str.replace(/%3A/g,':').replace(/%40/g,'@');
 const caseCurrency = (str) => str.startsWith("0x") ? str : str.toLowerCase();
 
 /**
+ * Shorten name for title
+ * @param str - String to be shorten
+ */
+const shortenTitle = (str) => str.length > 10 ? `${str.slice(0,4)}…${str.slice(-4)}` : str;
+
+/**
  * It takes a prefix and a props object, and returns a title
  * @param {'Pay' | 'Donate'} prefix - 'Pay' | 'Donate'
  * @param props - The props object that was used to initialized store.
  */
 const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
-	const network = props.network !== 'other' ? props.network : props.other;
+	let network
+	if (props.network === 'void') {
+		network = props.transport !== 'other'
+		? shortenTitle(props.transport)
+		: shortenTitle(props.other);
+	} else {
+		network = props.network !== 'other'
+		? shortenTitle(props.network)
+		: (checkValidity(props.other)
+		? shortenTitle(props.other)
+		: '');
+	}
 	let title = `${prefix} via ${network.toUpperCase()}`;
 	if (props.chain > 0 && (props.network === 'eth' || props.network === 'other')) {
 		title += `@${props.chain}`;
@@ -75,9 +93,9 @@ const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
 	if (props.params.currency.value) {
 		if (props.params.currency.value.length > 10) {
 			if(props.params.currency.value.startsWith("0x")) {
-				title += ` with ${props.params.currency.value.slice(0,4)}…${props.params.currency.value.slice(-4)}`;
+				title += ` with ${shortenTitle(props.params.currency.value)}`;
 			} else {
-				title += ` with ${props.params.currency.value.slice(0,4).toUpperCase()}…${props.params.currency.value.slice(-4).toUpperCase()}`;
+				title += ` with ${shortenTitle(props.params.currency.value.toUpperCase())}`;
 			}
 		} else {
 			title += ` with ${props.params.currency.value.toUpperCase()}`;
@@ -171,21 +189,23 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 				property += `:${props.network}`;
 			}
 		} else {
-			if(props.chain > 0) {
-				property += `:${props.other}@${props.chain}`;
-			} else {
-				property += `:${props.other}`;
+			if(checkValidity(props.other)) {
+				if(props.chain > 0) {
+					property += `:${props.other.toLowerCase()}@${props.chain}`;
+				} else {
+					property += `:${props.other.toLowerCase()}`;
+				}
 			}
 		}
 	} else if (type === 'iban' && props.bic) {
-		property += `:${props.bic}`;
+		property += `:${props.bic.toLowerCase()}`;
 	} else if (type === 'ach' && props.routingNumber) {
 		property += `:${props.routingNumber}`;
 	} else if (type === 'void') {
-		if(props.network !== 'other') {
-			property += `:${props.network}`;
+		if(props.transport !== 'other') {
+			property += `:${props.transport}`;
 		} else {
-			property += `:${props.other}`;
+			property += `:${props.other.toLowerCase()}`;
 		}
 	}
 

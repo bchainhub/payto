@@ -8,18 +8,18 @@ export const META_CONTENT = {
 		return account;
 	},
 	void: (props: Record<string, any>) => {
-		let content = props.exchangePoint.other;
+		let content = props.params.loc.other;
 
 		if (
-			props.network === 'geo' &&
-			Boolean(props.exchangePoint.lang) &&
-			Boolean(props.exchangePoint.long)
+			props.transport === 'geo' &&
+			Boolean(props.params.loc.lang) &&
+			Boolean(props.params.loc.long)
 		) {
-			content = `${props.exchangePoint.lang}:${props.exchangePoint.long}`;
+			content = `${props.params.loc.lang}:${props.params.loc.long}`;
 		}
 
-		if (props.network === 'plus') {
-			content = props.exchangePoint.plus.toLowerCase();
+		if (props.transport === 'plus') {
+			content = props.params.loc.plus.toUpperCase();
 		}
 
 		return content || '';

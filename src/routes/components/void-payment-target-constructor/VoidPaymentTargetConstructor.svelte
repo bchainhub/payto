@@ -21,14 +21,14 @@
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
 		<label id="transport-network-label" for="transport-network">Transport Network *</label>
 		<div class="[ flex flex-col items-stetch gap-4 ]">
-			{#if $constructor.void.network !== 'other'}
+			{#if $constructor.void.transport !== 'other'}
 				<div in:fade>
 					<ListBox
-						value={$constructor.void.network}
-						on:change={(ev) => ($constructor.void.network = ev.detail)}
+						value={$constructor.void.transport}
+						on:change={(ev) => ($constructor.void.transport = ev.detail)}
 					>
 						<ListBoxButton>
-							<span class="[ inline-block truncate uppercase ]">{$constructor.void.network}</span>
+							<span class="[ inline-block truncate uppercase ]">{$constructor.void.transport}</span>
 							<span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@
 				</div>
 			{/if}
 
-			{#if $constructor.void.network === 'other'}
+			{#if $constructor.void.transport === 'other'}
 				<div class={join('[ flex items-center ]', '[ relative ]')} in:fade>
 					<button
 						class={join(
@@ -88,7 +88,7 @@
 						)}
 						type="button"
 						title="Back to network menu options"
-						on:pointerdown={() => ($constructor.void.network = 'geo')}
+						on:pointerdown={() => ($constructor.void.transport = 'geo')}
 					>
 						<svg
 							class={join('[ bs-4 is-4 ]')}
@@ -118,6 +118,7 @@
 						placeholder="Other network"
 						autocomplete="off"
 						aria-labelledby="transport-network-label"
+						style="text-transform: uppercase"
 						bind:value={$constructor.void.other}
 					/>
 				</div>
@@ -126,8 +127,8 @@
 	</div>
 
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
-		<label id="exchange-point-label" for="exchange-point">Exchange Point</label>
-		{#if $constructor.void.network === 'geo'}
+		<label id="exchange-point-label" for="exchange-point">Location</label>
+		{#if $constructor.void.transport === 'geo'}
 			<div class="[ flex gap-4 ]">
 				<input
 					class={join(
@@ -139,7 +140,7 @@
 					placeholder="Latitude"
 					autocomplete="off"
 					aria-labelledby="exchange-point-label"
-					bind:value={$constructor.void.exchangePoint.lang}
+					bind:value={$constructor.void.params.loc.lang}
 				/>
 				<input
 					class={join(
@@ -152,13 +153,13 @@
 					placeholder="Longitude"
 					autocomplete="off"
 					aria-labelledby="exchange-point-label"
-					bind:value={$constructor.void.exchangePoint.long}
+					bind:value={$constructor.void.params.loc.long}
 				/>
 			</div>
 			<small class="[ -mbs-1 text-gray-400 ]">Search for the geocordinates - <a class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]" href="https://gps-coordinates.org/" target="_blank" rel="noreferrer">Latitude & Longitude (DD - Decimal Degrees)</a></small>
 		{/if}
 
-		{#if $constructor.void.network === 'plus'}
+		{#if $constructor.void.transport === 'plus'}
 			<input
 				class={join(
 					'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
@@ -167,15 +168,16 @@
 				)}
 				type="text"
 				id="exchange-point"
-				placeholder="Plus Code, e.g. Q2PP+9X"
+				placeholder="Plus Code, e.g. 87G8Q2PQ+96"
 				autocomplete="off"
 				aria-labelledby="exchange-point-label"
-				bind:value={$constructor.void.exchangePoint.plus}
+				style="text-transform: uppercase"
+				bind:value={$constructor.void.params.loc.plus}
 			/>
 			<small class="[ -mbs-1 text-gray-400 ]">Search for the <a class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]" href="https://plus.codes/map" target="_blank" rel="noreferrer">Plus Code</a></small>
 		{/if}
 
-		{#if $constructor.void.network === 'other'}
+		{#if $constructor.void.transport === 'other'}
 			<input
 				class={join(
 					'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
@@ -187,7 +189,7 @@
 				placeholder="Point"
 				autocomplete="off"
 				aria-labelledby="exchange-point-label"
-				bind:value={$constructor.void.exchangePoint.other}
+				bind:value={$constructor.void.params.loc.other}
 			/>
 		{/if}
 	</div>

@@ -33,8 +33,22 @@ export const TRANSPORT = {
 	],
 	iban: [
 		{
-			value: 'bic',
-			label: 'BIC / Swift',
+			value: 'iban',
+			label: 'IBAN',
+			symbol: ''
+		}
+	],
+	upi: [
+		{
+			value: 'upi',
+			label: 'UPI',
+			symbol: ''
+		}
+	],
+	ach: [
+		{
+			value: 'ach',
+			label: 'ACH',
 			symbol: ''
 		}
 	],

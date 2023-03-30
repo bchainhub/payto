@@ -8,11 +8,12 @@ declare namespace App {
 	// interface Platform {}
 }
 
-type ITransitionType = 'ican' | 'iban' | 'upi' | 'bic' | 'void';
+type ITransitionType = 'ican' | 'iban' | 'upi' | 'ach' | 'bic' | 'void';
 
 interface IPayload {
-	placeholder: string;
+	placeholder?: string;
 	value: string | undefined;
+	query?: boolean;
 }
 
 interface IOutput {
