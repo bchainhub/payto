@@ -119,6 +119,7 @@
 						placeholder="Other network"
 						autocomplete="off"
 						aria-labelledby="transport-network-label"
+						style="text-transform: uppercase"
 						bind:value={$constructor.ican.other}
 					/>
 				</div>

@@ -1,6 +1,7 @@
 import { TRANSPORT } from '$lib/data/transports.data';
 import { createStore } from '$lib/helpers/create-store.helper';
 import { generate } from '$lib/helpers/generate.helper';
+import { checkValidity } from '$lib/helpers/check-validity.helper';
 
 const INITIAL_STATE = {
 	ican: {
@@ -15,7 +16,7 @@ const INITIAL_STATE = {
 	},
 
 	iban: {
-		network: 'iban',
+		network: TRANSPORT.iban[0].value,
 		iban: '',
 		bic: '',
 		params: {
@@ -27,7 +28,7 @@ const INITIAL_STATE = {
 	},
 
 	upi: {
-		network: 'upi',
+		network: TRANSPORT.upi[0].value,
 		accountAlias: '',
 		params: {
 			currency: { value: undefined },
@@ -38,7 +39,7 @@ const INITIAL_STATE = {
 	},
 
 	ach: {
-		network: 'ach',
+		network: TRANSPORT.ach[0].value,
 		routingNumber: '',
 		accountNumber: '',
 		params: {
@@ -49,7 +50,7 @@ const INITIAL_STATE = {
 	},
 
 	bic: {
-		network: 'bic',
+		network: TRANSPORT.bic[0].value,
 		bic: '',
 		params: {
 			currency: { value: undefined },
@@ -58,10 +59,11 @@ const INITIAL_STATE = {
 	},
 
 	void: {
-		network: TRANSPORT.void[0].value,
-		exchangePoint: { lang: '', long: '', plus: '', other: '' },
+		network: 'void',
+		transport: TRANSPORT.void[0].value,
 		other: '',
 		params: {
+			loc: { value: undefined, lang: '', long: '', plus: '', other: '' },
 			currency: { value: undefined },
 			amount: { value: undefined },
 			receiverName: { value: undefined },
@@ -75,7 +77,11 @@ const BUILDER = {
 		const payload: IPayload[] = [
 			{
 				placeholder: '',
-				value: encodeURIComponent(props.network === 'other' ? props.other : props.network)
+				value: props.network === 'other'
+				? (checkValidity(props.other)
+				? encodeURIComponent(props.other.toLowerCase())
+				: '')
+				: encodeURIComponent(props.network)
 			},
 			{
 				placeholder: '',
@@ -157,30 +163,30 @@ const BUILDER = {
 	},
 
 	void: (props: typeof INITIAL_STATE.void) => {
-		let point = '';
-
 		if (
-			props.network === 'geo' &&
-			props.exchangePoint.lang !== '' &&
-			props.exchangePoint.long !== ''
+			props.transport === 'geo' &&
+			props.params.loc.lang !== '' &&
+			props.params.loc.long !== ''
 		) {
-			point = `${props.exchangePoint.lang}:${props.exchangePoint.long}`;
+			props.params.loc.value = `${props.params.loc.lang}:${props.params.loc.long}`;
 		}
-		if (props.network === 'plus') {
-			point = props.exchangePoint.plus.toUpperCase();
+		if (props.transport === 'plus') {
+			props.params.loc.value = props.params.loc.plus.toUpperCase();
 		}
-		if (props.network === 'other') {
-			point = props.exchangePoint.other;
+		if (props.transport === 'other') {
+			props.params.loc.value = props.params.loc.other;
 		}
 
 		const payload: IPayload[] = [
 			{
 				placeholder: '',
-				value: encodeURIComponent(props.network === 'other' ? props.other : props.network)
+				value: props.network
 			},
 			{
 				placeholder: '',
-				value: encodeURI(point)
+				value: props.transport === 'other'
+				? encodeURIComponent(props.other)
+				: encodeURIComponent(props.transport)
 			}
 		];
 
