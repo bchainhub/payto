@@ -1,33 +1,34 @@
 # Payto Money
 
-> Decentralized transfer of Assets
+> Decentralized Asset Transfer
 
-The 'payto' URI Scheme builder for Payments per [RFC 8905](https://datatracker.ietf.org/doc/rfc8905/) and additions.
+The 'payto' URI scheme builder supports Payments as outlined in [RFC 8905](https://datatracker.ietf.org/doc/rfc8905/) and subsequent amendments.
 
-## Technical specifications and organizational notes
+## Technical Specifications and Organizational Notes
 
+- [Extended Payto URI](docs/scheme.md)
 - [RFC 8905](https://datatracker.ietf.org/doc/rfc8905/)
 
-## Creating a project
+## Project Initialization
 
-If you're seeing this, you've probably already done this step. Congrats!
+If you're reading this, you've likely already initialized your project. Congratulations!
 
 ```bash
-# create a new project in the current directory
+# To create a new project in the current directory
 npm create svelte@latest
 
-# create a new project in my-app
+# To create a new project in 'my-app' directory
 npm create svelte@latest my-app
 ```
 
-## Developing
+## Development
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+After initializing your project and installing the necessary dependencies with `npm install` (or `pnpm install` or `yarn`), you can start a development server:
 
 ```bash
 npm run dev
 
-# or start the server and open the app in a new browser tab
+# To start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
 
@@ -39,10 +40,10 @@ To create a production version of your app:
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+The production build can be previewed using `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+> For deploying your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) suited to your target environment.
 
 ## License
 
-[CORE](LICENSE) License.
+This project is licensed under the [CORE](LICENSE) License.
