@@ -24,8 +24,7 @@
 			{#if $constructor.void.transport !== 'other'}
 				<div in:fade>
 					<ListBox
-						value={$constructor.void.transport}
-						on:change={(ev) => ($constructor.void.transport = ev.detail)}
+						bind:value={$constructor.void.transport}
 					>
 						<ListBoxButton>
 							<span class="[ inline-block truncate uppercase ]">{$constructor.void.transport}</span>

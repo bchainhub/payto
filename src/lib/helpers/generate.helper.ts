@@ -22,14 +22,14 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 
 		if (amount.mandatory) {
 			searchParams.set(
-				'amount',
+				(props.isFiat ? 'fiat' : 'amount'),
 				currency.value
 				? caseCurrency(currency.value) + ':' + amount.value
 				: amount.value
 			);
 		} else if (amount.value || currency.value) {
 			searchParams.set(
-				'amount',
+				(props.isFiat ? 'fiat' : 'amount'),
 				(amount.value && currency.value)
 				? caseCurrency(currency.value) + ':' + amount.value
 				: (currency.value ? caseCurrency(currency.value) + ':' : amount.value)
@@ -48,32 +48,32 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
  * camelCase to kebab-case
  * @param str - String to be kebabized
  */
-const kebabize = (str) => str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? "-" : "") + $.toLowerCase());
+const kebabize = (str: any) => str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($: any, ofs: any) => (ofs ? "-" : "") + $.toLowerCase());
 
 /**
  * Convert required characters back from encodeURIComponent
  * @param str - String to be decoded
  */
-const uriNormalize = (str) => str.replace(/%3A/g,':').replace(/%40/g,'@');
+const uriNormalize = (str: any) => str.replace(/%3A/g,':').replace(/%40/g,'@');
 
 /**
  * Convert currency to lower case except Smart Contracts
  * @param str - String to be converted
  */
-const caseCurrency = (str) => str.startsWith("0x") ? str : str.toLowerCase();
+const caseCurrency = (str: any) => str.startsWith("0x") ? str : str.toLowerCase();
 
 /**
  * Shorten name for title
  * @param str - String to be shorten
  */
-const shortenTitle = (str) => str.length > 10 ? `${str.slice(0,4)}…${str.slice(-4)}` : str;
+const shortenTitle = (str: any) => str.length > 10 ? `${str.slice(0,4)}…${str.slice(-4)}` : str;
 
 /**
  * It takes a prefix and a props object, and returns a title
- * @param {'Pay' | 'Donate'} prefix - 'Pay' | 'Donate'
+ * @param {'Pay' | 'Donate'} prefix - 'pay' | 'donate'
  * @param props - The props object that was used to initialized store.
  */
-const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
+const getTitle = (prefix: 'pay' | 'donate', props: Record<string, any>) => {
 	let network
 	if (props.network === 'void') {
 		network = props.transport !== 'other'
@@ -86,7 +86,13 @@ const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
 		? shortenTitle(props.other)
 		: '');
 	}
-	let title = `${prefix} via ${network.toUpperCase()}`;
+	let namePrefix;
+	if (typeof props.params !== 'undefined' && typeof props.params.rc !== 'undefined' && typeof props.params.rc.value !== 'undefined') {
+		namePrefix = `Recurring ${prefix}`;
+	} else {
+		namePrefix = prefix[0].toUpperCase() + prefix.slice(1);
+	}
+	let title = `${namePrefix} via ${network.toUpperCase()}`;
 	if (props.chain > 0 && (props.network === 'eth' || props.network === 'other')) {
 		title += `@${props.chain}`;
 	}
@@ -112,7 +118,7 @@ const getTitle = (prefix: 'Pay' | 'Donate', props: Record<string, any>) => {
  * @param props - The props object that was used to initialized store.
  */
 const generateMarkDown = (link: string, props: Record<string, any>) => {
-	return `[${getTitle('Pay', props)}](${link})`;
+	return `[${getTitle('pay', props)}](${link})`;
 };
 
 /**
@@ -122,7 +128,7 @@ const generateMarkDown = (link: string, props: Record<string, any>) => {
  * @returns A string that contains an anchor tag with a link and a title.
  */
 const generateHtmlLink = (link: string, props: Record<string, any>) => {
-	return `<a href="${link}">${getTitle('Pay', props)}</a>`;
+	return `<a href="${link}">${getTitle('pay', props)}</a>`;
 };
 
 /**
@@ -133,20 +139,35 @@ const generateHtmlLink = (link: string, props: Record<string, any>) => {
  * page.
  */
 const generateHtmlPaymentButton = (link: string, props: Record<string, any>) => {
-	const style = `
-display:inline-block;
-background-color:#518842;
-color:#d3fbc9;
-text-decoration:none;
-font-weight:500;
-padding:.5em 1.3em .5em .7em;
-border:3px #77bb65 solid;
-border-left:10px #77bb65 solid;
-border-radius:4px 9999px 9999px 4px;
+	const style1 = `
+position:relative;
+cursor:pointer;
+background:#77bb65;
+border:0;
+border-radius:50px;
+padding:10px 20px 10px 53px;
+color:#f6fff4;
+font-size:15px;
 font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+font-weight:600;
+text-decoration:none;
+top:5px;
+bottom:5px;
+text-shadow: 0px 0px 1px #275b19;
+`;
+	const style2 = `
+font-size:1.3em;
+background:#518842;
+border-radius:100px;
+border:4px solid #77bb65;
+padding:8px 10px;
+margin:10px;
+position:absolute;
+top:-15px;
+left:-10px;
 `;
 
-	return `<a href="${link}" style="${style}">💸&#8192;${getTitle('Pay', props)}</a>`;
+	return `<a href="${link}" style="${style1}">${getTitle('pay', props)}<span style="${style2}">💸</span></a>`;
 };
 
 /**
@@ -157,20 +178,35 @@ font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Can
  * @returns A string of HTML code that will be used to create a donation button.
  */
 const generateHtmlDonationButton = (link: string, props: Record<string, any>) => {
-	const style = `
-display:inline-block;
-background-color:#aa8c2c;
-color:#f7ebc9;
-text-decoration:none;
-font-weight:500;
-padding:.5em 1.3em .5em .7em;
-border:3px #ddbf5f solid;
-border-left:10px #ddbf5f solid;
-border-radius:4px 9999px 9999px 4px;
+	const style1 = `
+position:relative;
+cursor:pointer;
+background:#c2a04b;
+border:0;
+border-radius:50px;
+padding:10px 20px 10px 53px;
+color:#f5ecd3;
+font-size:15px;
 font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+font-weight:600;
+text-decoration:none;
+top:5px;
+bottom:5px;
+text-shadow: 0px 0px 1px #7d601a;
+`;
+	const style2 = `
+font-size:1.3em;
+background:#9e8146;
+border-radius:100px;
+border:4px solid #c2a04b;
+padding:8px 10px;
+margin:10px;
+position:absolute;
+top:-15px;
+left:-10px;
 `;
 
-	return `<a href="${link}" style="${style}">🎁&#8192;${getTitle('Donate', props)}</a>`;
+	return `<a href="${link}" style="${style1}">${getTitle('donate', props)}<span style="${style2}">🎁</span></a>`;
 };
 
 /**
@@ -241,6 +277,6 @@ export const generate = (type: ITransitionType, props: any, payload: IPayload[])
 			value: generateHtmlDonationButton(link, props),
 			previewable: true
 		},
-		{ label: 'Meta tag', value: generateMetaTag(type, props) }
+		{ label: 'Meta tag', note: 'Basic payment instructions only.', value: generateMetaTag(type, props) }
 	];
 };

@@ -13,6 +13,8 @@
 		'[ focus:outline-none focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 focus-visible:ring-offset-green-700 focus-visible:ring-offset-2 ]',
 		'[ sm:text-sm ]'
 	)}
+	id={id}
+	aria-labelledby={ariaLabelledBy}
 >
 	<slot />
 </ListboxButton>

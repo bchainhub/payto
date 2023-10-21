@@ -43,7 +43,7 @@
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>FIAT Currency code</FieldGroupLabel>
+		<FieldGroupLabel>Fiat currency</FieldGroupLabel>
 		<FieldGroupText placeholder="e.g. USD" bind:value={$constructor.ach.params.currency.value} />
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>

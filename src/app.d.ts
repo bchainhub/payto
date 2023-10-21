@@ -8,7 +8,7 @@ declare namespace App {
 	// interface Platform {}
 }
 
-type ITransitionType = 'ican' | 'iban' | 'upi' | 'ach' | 'bic' | 'void';
+type ITransitionType = 'ican' | 'iban' | 'ach' | 'upi' | 'bic' | 'void';
 
 interface IPayload {
 	placeholder?: string;
@@ -19,5 +19,6 @@ interface IPayload {
 interface IOutput {
 	label: string;
 	value: string;
+	note?: string;
 	previewable?: boolean;
 }

@@ -8,7 +8,7 @@
 
 <ListboxOptions
 	class={join(
-		'[ absolute w-full py-1 mt-1 overflow-auto text-base bg-gray-900 rounded-sm shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 ]',
+		'[ absolute w-full py-1 mt-1 overflow-auto text-base bg-gray-900 rounded-sm shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 z-10 ]',
 		'[ focus:outline-none ]',
 		'[ sm:text-sm ]'
 	)}

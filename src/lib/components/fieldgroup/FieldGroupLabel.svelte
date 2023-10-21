@@ -2,8 +2,9 @@
 	import { getFieldGroupContext } from './fieldgroup.context';
 
 	const ctx = getFieldGroupContext();
+	export let classValue: string = '';
 </script>
 
-<label class={$$props.class} id={ctx.labelId} for={ctx.fieldId}>
+<label class={classValue} id={ctx.labelId} for={ctx.fieldId}>
 	<slot />
 </label>
