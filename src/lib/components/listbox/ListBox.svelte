@@ -3,8 +3,11 @@
 	import { Listbox } from '@rgossiaux/svelte-headlessui';
 
 	export let value: string | undefined;
+	export let classValue: string = '';
+	let computedClass: string = join('[ relative mt-1 listbox ]', classValue);
 </script>
 
-<Listbox class={join('[ relative mt-1 ]', $$props.class)} {value} on:change>
+<Listbox bind:value={value} class={computedClass} on:change {...$$restProps}>
 	<slot />
 </Listbox>
+

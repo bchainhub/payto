@@ -30,7 +30,7 @@
 	let type: ITransitionType = TYPES[0].value;
 	$: outputs = constructor.build(type);
 
-	const handleOnCopy = async (ev) => {
+	const handleOnCopy = async (ev: any) => {
 		await window.navigator.clipboard.writeText(ev.currentTarget.dataset.value);
 
 		toast.success('Copied to clipboard', {
@@ -51,8 +51,8 @@
 				<TabList>
 					<Tab>ICAN</Tab>
 					<Tab>IBAN</Tab>
-					<Tab>UPI</Tab>
 					<Tab>ACH</Tab>
+					<Tab>UPI</Tab>
 					<Tab>BIC</Tab>
 					<Tab>CASH</Tab>
 				</TabList>
@@ -67,11 +67,11 @@
 					</TabPanel>
 
 					<TabPanel>
-						<UnifiedPaymentsInterfaceConstructor />
+						<AutomatedClearingHouseConstructor />
 					</TabPanel>
 
 					<TabPanel>
-						<AutomatedClearingHouseConstructor />
+						<UnifiedPaymentsInterfaceConstructor />
 					</TabPanel>
 
 					<TabPanel>
@@ -158,11 +158,19 @@
 						</div>
 
 						{#if output.previewable}
-							<div class="[ flex flex-col items-stretch gap-2 ]">
-								<label class="[ text-gray-300 text-sm uppercase ]" for={'preview of ' + index}>
-									preview
+							<div class="[ flex flex-col items-stretch gap-3 mb-3 ]">
+								<label class="[ text-gray-300 text-sm ]" for={'preview of ' + index}>
+									Preview
 								</label>
 								<output id={'preview of ' + index}>{@html output.value}</output>
+							</div>
+						{/if}
+
+						{#if output.note}
+							<div class="[ flex flex-col items-stretch gap-3 mb-3 ]">
+								<small class="[ -mb-1 text-gray-400 ]" id={'note of ' + index}>
+									{output.note}
+								</small>
 							</div>
 						{/if}
 					</div>

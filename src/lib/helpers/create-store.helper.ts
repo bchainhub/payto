@@ -1,25 +1,25 @@
-import { derived, writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 
-/**
- * It takes an initial state and a builder object, and returns a writable store with a reset function
- * and a build function
- * @param {TState} initial - The initial state of the store.
- * @param builder - Record<TKey, (props: any) => void>
- */
-export const createStore = <TState, TKey extends keyof TState>(
-	initial: TState,
+type BaseState = { _reactivityTrigger?: boolean };
+
+export const createStore = <TState extends Record<string, any>, TKey extends keyof TState>(
+	initial: TState & BaseState,
 	builder: Record<TKey, (props: any) => IOutput[]>
 ) => {
 	const state = structuredClone(initial);
-	const store = writable(state);
+	const store = writable<TState & BaseState>(state);
 
 	const reset = (name: keyof typeof initial) => () => {
-		store.update(($state) => ({ ...$state, [name]: initial[name] }));
+		store.update((currentState: TState & BaseState) => {
+			const deepClone = JSON.parse(JSON.stringify(initial[name]));
+			const updatedState = { ...currentState, [name]: deepClone, _reactivityTrigger: !currentState._reactivityTrigger };
+			return updatedState;
+		});
 	};
 
 	const build = (name: TKey) => {
-		return derived(store, ($state) => {
-			const props = $state[name];
+		return derived(store, ($state: TState & BaseState) => {
+			const props = $state[name as keyof TState];
 			return builder[name](props);
 		});
 	};

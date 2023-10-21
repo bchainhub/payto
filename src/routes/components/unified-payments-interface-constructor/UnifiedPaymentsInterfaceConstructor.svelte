@@ -42,8 +42,8 @@
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>Currency code</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. USD; EUR" bind:value={$constructor.upi.params.currency.value} />
+		<FieldGroupLabel>Fiat currency</FieldGroupLabel>
+		<FieldGroupText placeholder="e.g. CHF; EUR; USD" bind:value={$constructor.upi.params.currency.value} />
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
 </div>

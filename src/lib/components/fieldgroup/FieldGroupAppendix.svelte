@@ -4,6 +4,6 @@
 	const ctx = getFieldGroupContext();
 </script>
 
-<small class="[ -mbs-1 text-gray-400 ]" id={ctx.descriptionId}>
+<small class="[ -mb-1 text-gray-400 ]" id={ctx.descriptionId}>
 	<slot />
 </small>

@@ -3,8 +3,16 @@
 	import { getFieldGroupContext } from './fieldgroup.context';
 
 	export let value: string | number | undefined;
-	export let placeholder: string;
+	export let min: string;
 	export let classValue: string = '';
+	export let unixTimestamp: number | undefined;
+
+	$: if (typeof value === 'string' && value) {
+		const date = new Date(value);
+		unixTimestamp = Math.floor(date.getTime() / 1000);
+	} else {
+		unixTimestamp = undefined;
+	}
 
 	const ctx = getFieldGroupContext();
 	let computedClass: string = join(
@@ -17,12 +25,11 @@
 
 <input
 	class={computedClass}
-	type="text"
-	autocomplete="off"
+	type="datetime-local"
 	id={ctx.fieldId}
 	aria-labelledby={ctx.labelId}
 	aria-describedby={ctx.descriptionId}
-	{placeholder}
+	{min}
 	bind:value
 	{...$$restProps}
 />

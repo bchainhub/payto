@@ -3,8 +3,8 @@ export const META_CONTENT = {
 	iban: (props: Record<string, any>) => props.iban || '',
 	bic: (props: Record<string, any>) => props.bic || '',
 	upi: (props: Record<string, any>) => props.accountAlias || '',
-	ach: (props: Record<number, number>) => {
-		let account = /^\d+$/.test(props.accountNumber) ? props.accountNumber : '';
+	ach: (props: { accountNumber?: string }) => {
+		let account = /^\d+$/.test(props.accountNumber || '') ? props.accountNumber : '';
 		return account;
 	},
 	void: (props: Record<string, any>) => {

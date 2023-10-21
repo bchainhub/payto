@@ -8,7 +8,7 @@
 				href="https://github.com/cryptohub-digital"
 				target="_blank"
 				rel="noreferrer"
-			>CRYPTO ▪ HUB</a> Initiative. // Licensed under the
+			>CRYPTO ▪ HUB</a> Initiative. Licensed under the
 			<a
 				class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
 				href="https://github.com/cryptohub-digital/core-license/blob/master/LICENSE"
@@ -33,7 +33,13 @@
 					href="https://datatracker.ietf.org/doc/html/rfc8905"
 					target="_blank"
 					rel="noreferrer"
-				>RFC 8905</a>.
+				>RFC 8905</a>;
+				<a
+					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
+					href="https://github.com/cryptohub-digital/payto/blob/master/docs/scheme.md"
+					target="_blank"
+					rel="noreferrer"
+				>Documentation</a>.
 			</small>
 		</p>
 	</div>

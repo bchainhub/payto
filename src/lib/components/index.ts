@@ -6,6 +6,9 @@ export {
 	FieldGroup,
 	FieldGroupLabel,
 	FieldGroupText,
+	FieldGroupMiniNumber,
 	FieldGroupNumber,
-	FieldGroupAppendix
+	FieldGroupDateTime,
+	FieldGroupAppendix,
+	FieldGroupRadioWithNumber
 } from './fieldgroup';

@@ -9,9 +9,14 @@ const INITIAL_STATE = {
 		other: '',
 		destination: '',
 		chain: '',
+		isFiat: false,
+		isDl: false,
+		isRc: false,
 		params: {
 			currency: { value: undefined },
-			amount: { value: undefined }
+			amount: { value: undefined },
+			dl: { value: undefined },
+			rc: { value: undefined }
 		}
 	},
 
@@ -19,11 +24,15 @@ const INITIAL_STATE = {
 		network: TRANSPORT.iban[0].value,
 		iban: '',
 		bic: '',
+		isDl: false,
+		isRc: false,
 		params: {
 			currency: { value: undefined },
 			amount: { value: undefined },
 			receiverName: { value: undefined },
-			message: { value: undefined }
+			message: { value: undefined },
+			dl: { value: undefined },
+			rc: { value: undefined }
 		}
 	},
 
@@ -63,7 +72,7 @@ const INITIAL_STATE = {
 		transport: TRANSPORT.void[0].value,
 		other: '',
 		params: {
-			loc: { value: undefined, lang: '', long: '', plus: '', other: '' },
+			loc: { value: '', lang: '', long: '', plus: '', other: '' },
 			currency: { value: undefined },
 			amount: { value: undefined },
 			receiverName: { value: undefined },
@@ -85,7 +94,7 @@ const BUILDER = {
 			},
 			{
 				placeholder: '',
-				value: props.destination && props.chain && (props.network === 'eth' || props.network === 'other') > 0
+				value: props.destination && props.chain && (props.network === 'eth' || props.network === 'other')
 				? encodeURIComponent(props.destination) + '@' + encodeURIComponent(props.chain)
 				: encodeURIComponent(props.destination)
 			}

@@ -10,14 +10,14 @@ export const TYPES = [
 		link: 'https://en.wikipedia.org/wiki/International_Bank_Account_Number'
 	},
 	{
-		value: 'upi',
-		label: 'UPI',
-		link: 'https://en.wikipedia.org/wiki/Unified_Payments_Interface'
-	},
-	{
 		value: 'ach',
 		label: 'ACH',
 		link: 'https://en.wikipedia.org/wiki/ACH_Network'
+	},
+	{
+		value: 'upi',
+		label: 'UPI',
+		link: 'https://en.wikipedia.org/wiki/Unified_Payments_Interface'
 	},
 	{
 		value: 'bic',
