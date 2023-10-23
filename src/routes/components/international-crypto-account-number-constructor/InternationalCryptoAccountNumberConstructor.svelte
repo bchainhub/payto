@@ -154,7 +154,7 @@
 	</div>
 
 	<FieldGroup>
-		<FieldGroupLabel>Address / NS *</FieldGroupLabel>
+		<FieldGroupLabel>Address / <abbr title="Name Service">NS</abbr> *</FieldGroupLabel>
 		<FieldGroupText
 			placeholder={
 				$constructor.ican.network === 'btc' ? 'e.g. 1BvBEx…' :
@@ -188,7 +188,7 @@
 		<FieldGroup>
 			<FieldGroupLabel>Chain ID</FieldGroupLabel>
 			<FieldGroupText placeholder="e.g. 61" bind:value={$constructor.ican.chain} />
-			<FieldGroupAppendix>If left empty, the default is the default network chain.</FieldGroupAppendix>
+			<FieldGroupAppendix>If left empty, the default network chain will be used.</FieldGroupAppendix>
 		</FieldGroup>
 	{/if}
 
