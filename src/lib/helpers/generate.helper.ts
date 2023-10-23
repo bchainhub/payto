@@ -154,9 +154,10 @@ text-decoration:none;
 top:5px;
 bottom:5px;
 text-shadow: 0px 0px 1px #275b19;
+white-space: nowrap;
 `;
 	const style2 = `
-font-size:1.3em;
+font-size:1.1em;
 background:#518842;
 border-radius:100px;
 border:4px solid #77bb65;
@@ -193,9 +194,10 @@ text-decoration:none;
 top:5px;
 bottom:5px;
 text-shadow: 0px 0px 1px #7d601a;
+white-space: nowrap;
 `;
 	const style2 = `
-font-size:1.3em;
+font-size:1.1em;
 background:#9e8146;
 border-radius:100px;
 border:4px solid #c2a04b;

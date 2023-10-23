@@ -30,31 +30,39 @@
 	let computedClass: string = join(
 		'[ plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
 		'[ focus:outline-none focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 focus-visible:ring-offset-green-700 focus-visible:ring-offset-2 ]',
-		'[ sm:text-sm ]'
+		'[ w-1/4 sm:text-sm mr-2 ]'
 	);
 </script>
 
-<div class="flex items-center gap-4">
+<div>
+	<div class="flex flex-wrap mb-2">
+		{#each options as option}
+			<label class="flex-grow flex items-center">
+				<input
+					type="radio"
+					name="recurrencePattern"
+					value={option.value}
+					bind:group={checkedValue}
+					on:change={() => internalCheckedValue.set(option.value)}
+					disabled={option.disabled || _disabled} />
+				<span class="ml-1">{option.name}</span>
+			</label>
+		{/each}
+	</div>
 	{#each options as option}
-		<label>
-			<input
-				type="radio"
-				name="recurrencePattern"
-				value={option.value}
-				bind:group={checkedValue}
-				on:change={() => internalCheckedValue.set(option.value)}
-				disabled={option.disabled || _disabled} />
-			{option.name}
-		</label>
-		{#if option.hasNumberInput && checkedValue === option.value}
-			<input
-				class={computedClass}
-				type="number"
-				bind:value={numberValue}
-				min={numberMin}
-				max={numberMax}
-				placeholder={option.name}
-				disabled={checkedValue !== option.value || _disabled} />
-		{/if}
+		<div class="flex items-center">
+			{#if option.hasNumberInput && checkedValue === option.value}
+				<label for="input-{option.name}" class="mr-2">{option.name}:</label>
+				<input
+					id="input-{option.name}"
+					class={computedClass}
+					type="number"
+					bind:value={numberValue}
+					min={numberMin}
+					max={numberMax}
+					placeholder={option.name}
+					disabled={checkedValue !== option.value || _disabled} />
+			{/if}
+		</div>
 	{/each}
 </div>

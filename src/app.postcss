@@ -85,3 +85,12 @@ input[type="checkbox"]:checked:hover, [type='radio']:checked:hover {
 	background-color: var(--color-green-core);
 	color: #3a4659;
 }
+
+abbr {
+	cursor: help;
+}
+
+abbr:where([title]) {
+    -webkit-text-decoration: underline rgb(249 250 251 / .5) dotted;
+    text-decoration: underline rgb(249 250 251 / .5) dotted;
+}
