@@ -2,12 +2,12 @@
 	"name": "payto",
 	"version": "2.0.0",
 	"description": "Decentralized transfer of assets.",
-	"author": "CRYPTO ▪ HUB",
+	"author": "Blockchain Hub",
 	"license": "CORE",
 	"bugs": {
-		"url": "https://github.com/cryptohub-digital/Payto/issues"
+		"url": "https://github.com/blockchainhub/Payto/issues"
 	},
-	"homepage": "https://github.com/cryptohub-digital/Payto#readme",
+	"homepage": "https://github.com/blockchainhub/Payto#readme",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -23,7 +23,6 @@
 		"@fontsource/fira-mono": "^5.0.8",
 		"@neoconfetti/svelte": "^1.0.0",
 		"@playwright/test": "^1.39.0",
-		"@rgossiaux/svelte-headlessui": "^2.0.0",
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.26.0",
 		"@tailwindcss/forms": "^0.5.6",
@@ -40,6 +39,7 @@
 		"prettier-plugin-svelte": "^3.0.3",
 		"svelte": "^4.2.2",
 		"svelte-check": "^3.5.2",
+		"svelte-headlessui": "^0.0.32",
 		"svelte-preprocess": "^5.0.4",
 		"tailwindcss": "^3.3.3",
 		"tailwindcss-logical": "^3.0.1",
@@ -50,8 +50,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@cryptohub/coco": "^2.1.2",
-		"@cryptohub/ican": "^0.2.0",
 		"svelte-french-toast": "^1.2.0"
 	}
 }
