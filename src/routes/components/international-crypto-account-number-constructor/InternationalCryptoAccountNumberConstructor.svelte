@@ -6,9 +6,9 @@
 		FieldGroupNumber,
 		FieldGroupDateTime,
 		FieldGroupText,
-		FieldGroupRadioWithNumber
+		FieldGroupRadioWithNumber,
+		Listbox
 	} from '$lib/components';
-	import { ListboxV2 } from '$lib/components/listBoxV2';
 
 	import { TRANSPORT } from '$lib/data/transports.data';
 	import { join } from '$lib/helpers/join.helper';
@@ -47,7 +47,7 @@
 		<div class="[ flex flex-col items-stetch gap-4 ]">
 			{#if $constructor.ican.network !== 'other'}
 				<div in:fade>
-					<ListboxV2 bind:value={$constructor.ican.network} items={TRANSPORT.ican} />
+					<Listbox bind:value={$constructor.ican.network} items={TRANSPORT.ican} />
 				</div>
 			{/if}
 

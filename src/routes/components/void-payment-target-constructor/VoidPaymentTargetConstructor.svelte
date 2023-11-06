@@ -4,9 +4,9 @@
 		FieldGroupAppendix,
 		FieldGroupLabel,
 		FieldGroupNumber,
-		FieldGroupText
+		FieldGroupText,
+		Listbox
 	} from '$lib/components';
-	import { ListboxV2 } from '$lib/components/listBoxV2';
 
 	import { TRANSPORT } from '$lib/data/transports.data';
 	import { join } from '$lib/helpers/join.helper';
@@ -20,7 +20,7 @@
 		<div class="[ flex flex-col items-stetch gap-4 ]">
 			{#if $constructor.void.transport !== 'other'}
 				<div in:fade>
-					<ListboxV2 bind:value={$constructor.void.transport} items={TRANSPORT.void} />
+					<Listbox bind:value={$constructor.void.transport} items={TRANSPORT.void} />
 				</div>
 			{/if}
 			{#if $constructor.void.transport === 'other'}

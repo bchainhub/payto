@@ -1,7 +1,7 @@
 <script lang="ts">
 	import toast, { Toaster } from 'svelte-french-toast';
 
-	import { Box, BoxContent, BoxTitle, Page } from '$lib/components';
+	import { Box, BoxContent, BoxTitle, Page, Tabs } from '$lib/components';
 
 	import {
 		AutomatedClearingHouseConstructor,
@@ -16,7 +16,6 @@
 	import { join } from '$lib/helpers/join.helper';
 	import { Icon } from '$lib/icons';
 	import { constructor } from '$lib/store/constructor.store';
-	import { TabsV2 } from '$lib/components/tabsV2';
 
 	let type: ITransitionType = TYPES[0].value;
 	$: outputs = constructor.build(type);
@@ -38,7 +37,7 @@
 		<BoxTitle>Payment Constructor</BoxTitle>
 
 		<BoxContent>
-			<TabsV2
+			<Tabs
 				bind:selectedTab={type}
 				config={{
 					ican: {
