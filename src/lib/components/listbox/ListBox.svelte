@@ -7,7 +7,6 @@
 	let computedClass: string = join('[ relative mt-1 listbox ]', classValue);
 </script>
 
-<Listbox bind:value={value} class={computedClass} on:change {...$$restProps}>
+<Listbox bind:value class={computedClass} on:change {...$$restProps}>
 	<slot />
 </Listbox>
-
