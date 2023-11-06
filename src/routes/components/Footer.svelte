@@ -5,13 +5,13 @@
 		<p>A
 			<a
 				class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
-				href="https://github.com/blockchainhub"
+				href="https://github.com/bchainhub"
 				target="_blank"
 				rel="noreferrer"
-			>CRYPTO ▪ HUB</a> Initiative. Licensed under the
+			>Blockchain Hub</a> Initiative. Licensed under the
 			<a
 				class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
-				href="https://github.com/blockchainhub/core-license/blob/master/LICENSE"
+				href="https://github.com/bchainhub/core-license/blob/master/LICENSE"
 				target="_blank"
 				rel="noreferrer"
 			>Core License</a>.
@@ -22,7 +22,7 @@
 				Source code is located at
 				<a
 					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
-					href="https://github.com/blockchainhub/Payto"
+					href="https://github.com/bchainhub/Payto"
 					target="_blank"
 					rel="noreferrer"
 				>GitHub</a>. Feel free to contribute.
@@ -36,7 +36,7 @@
 				>RFC 8905</a>;
 				<a
 					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
-					href="https://github.com/blockchainhub/payto/blob/master/docs/scheme.md"
+					href="https://github.com/bchainhub/payto/blob/master/docs/scheme.md"
 					target="_blank"
 					rel="noreferrer"
 				>Documentation</a>.
