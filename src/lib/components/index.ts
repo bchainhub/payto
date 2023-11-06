@@ -1,7 +1,7 @@
 export { Page } from './page';
 export { Box, BoxTitle, BoxContent } from './box';
-export { Tab, TabGroup, TabList, TabPanel, TabPanels } from './tabs';
-export { ListBox, ListBoxButton, ListBoxMenu, ListBoxOption } from './listbox';
+export { Listbox } from './listBox';
+export { Tabs } from './tabs';
 export {
 	FieldGroup,
 	FieldGroupLabel,

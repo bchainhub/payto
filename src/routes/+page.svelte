@@ -1,17 +1,7 @@
 <script lang="ts">
 	import toast, { Toaster } from 'svelte-french-toast';
 
-	import {
-		Box,
-		BoxContent,
-		BoxTitle,
-		Page,
-		Tab,
-		TabGroup,
-		TabList,
-		TabPanel,
-		TabPanels
-	} from '$lib/components';
+	import { Box, BoxContent, BoxTitle, Page, Tabs } from '$lib/components';
 
 	import {
 		AutomatedClearingHouseConstructor,
@@ -47,43 +37,35 @@
 		<BoxTitle>Payment Constructor</BoxTitle>
 
 		<BoxContent>
-			<TabGroup on:change={(ev) => (type = TYPES[ev.detail].value)}>
-				<TabList>
-					<Tab>ICAN</Tab>
-					<Tab>IBAN</Tab>
-					<Tab>ACH</Tab>
-					<Tab>UPI</Tab>
-					<Tab>BIC</Tab>
-					<Tab>CASH</Tab>
-				</TabList>
-
-				<TabPanels>
-					<TabPanel>
-						<InternationalCryptoAccountNumberConstructor />
-					</TabPanel>
-
-					<TabPanel>
-						<InternationalBankAccountNumberConstructor />
-					</TabPanel>
-
-					<TabPanel>
-						<AutomatedClearingHouseConstructor />
-					</TabPanel>
-
-					<TabPanel>
-						<UnifiedPaymentsInterfaceConstructor />
-					</TabPanel>
-
-					<TabPanel>
-						<BusinessIdentifierCodeConstructor />
-					</TabPanel>
-
-					<TabPanel>
-						<VoidPaymentTargetConstructor />
-					</TabPanel>
-				</TabPanels>
-			</TabGroup>
-
+			<Tabs
+				bind:selectedTab={type}
+				config={{
+					ican: {
+						label: 'ICAN',
+						component: InternationalCryptoAccountNumberConstructor
+					},
+					iban: {
+						label: 'IBAN',
+						component: InternationalBankAccountNumberConstructor
+					},
+					ach: {
+						label: 'ACH',
+						component: AutomatedClearingHouseConstructor
+					},
+					upi: {
+						label: 'UPI',
+						component: UnifiedPaymentsInterfaceConstructor
+					},
+					bic: {
+						label: 'BIC',
+						component: BusinessIdentifierCodeConstructor
+					},
+					void: {
+						label: 'CASH',
+						component: VoidPaymentTargetConstructor
+					}
+				}}
+			/>
 			<button
 				class={join(
 					'[ is-full bs-12 mbs-auto plb-2 pli-3 text-center text-white border border-gray-700 bg-gray-700 rounded-md transition-all duration-200 outline-none ]',
