@@ -4,12 +4,9 @@
 		FieldGroupAppendix,
 		FieldGroupLabel,
 		FieldGroupNumber,
-		FieldGroupText,
-		ListBox,
-		ListBoxButton,
-		ListBoxMenu,
-		ListBoxOption
+		FieldGroupText
 	} from '$lib/components';
+	import { ListboxV2 } from '$lib/components/listBoxV2';
 
 	import { TRANSPORT } from '$lib/data/transports.data';
 	import { join } from '$lib/helpers/join.helper';
@@ -23,60 +20,9 @@
 		<div class="[ flex flex-col items-stetch gap-4 ]">
 			{#if $constructor.void.transport !== 'other'}
 				<div in:fade>
-					<ListBox
-						bind:value={$constructor.void.transport}
-					>
-						<ListBoxButton>
-							<span class="[ inline-block truncate uppercase ]">{$constructor.void.transport}</span>
-							<span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									fill="currentColor"
-									aria-hidden="true"
-									class="w-5 h-5 text-gray-400"
-								>
-									<path
-										fill-rule="evenodd"
-										d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-										clip-rule="evenodd"
-									/>
-								</svg>
-							</span>
-						</ListBoxButton>
-
-						<ListBoxMenu items={TRANSPORT.void} let:item>
-							<ListBoxOption value={item.value} let:selected>
-								<div class={join('[ inline-flex items-center gap-2 transition-all duration-200 ]')}>
-									<span class="[ truncate font-medium ]">{item.label}</span>
-									<span class="[ truncate font-medium text-gray-400 ]">{item.symbol}</span>
-								</div>
-
-								{#if selected}
-									<span
-										class="[ absolute inset-y-0 left-0 flex items-center pli-3 text-green-500 ]"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 20 20"
-											fill="currentColor"
-											aria-hidden="true"
-											class="w-5 h-5"
-										>
-											<path
-												fill-rule="evenodd"
-												d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-												clip-rule="evenodd"
-											/>
-										</svg>
-									</span>
-								{/if}
-							</ListBoxOption>
-						</ListBoxMenu>
-					</ListBox>
+					<ListboxV2 bind:value={$constructor.void.transport} items={TRANSPORT.void} />
 				</div>
 			{/if}
-
 			{#if $constructor.void.transport === 'other'}
 				<div class={join('[ flex items-center ]', '[ relative ]')} in:fade>
 					<button
@@ -155,7 +101,14 @@
 					bind:value={$constructor.void.params.loc.long}
 				/>
 			</div>
-			<small class="[ -mbs-1 text-gray-400 ]">Search for the geocordinates - <a class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]" href="https://gps-coordinates.org/" target="_blank" rel="noreferrer">Latitude & Longitude (DD - Decimal Degrees)</a></small>
+			<small class="[ -mbs-1 text-gray-400 ]"
+				>Search for the geocordinates - <a
+					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
+					href="https://gps-coordinates.org/"
+					target="_blank"
+					rel="noreferrer">Latitude & Longitude (DD - Decimal Degrees)</a
+				></small
+			>
 		{/if}
 
 		{#if $constructor.void.transport === 'plus'}
@@ -173,7 +126,14 @@
 				style="text-transform: uppercase"
 				bind:value={$constructor.void.params.loc.plus}
 			/>
-			<small class="[ -mbs-1 text-gray-400 ]">Search for the <a class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]" href="https://plus.codes/map" target="_blank" rel="noreferrer">Plus Code</a></small>
+			<small class="[ -mbs-1 text-gray-400 ]"
+				>Search for the <a
+					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
+					href="https://plus.codes/map"
+					target="_blank"
+					rel="noreferrer">Plus Code</a
+				></small
+			>
 		{/if}
 
 		{#if $constructor.void.transport === 'other'}
@@ -203,10 +163,7 @@
 
 	<FieldGroup>
 		<FieldGroupLabel>Message for Beneficiary</FieldGroupLabel>
-		<FieldGroupText
-			placeholder="e.g. ID001"
-			bind:value={$constructor.void.params.message.value}
-		/>
+		<FieldGroupText placeholder="e.g. ID001" bind:value={$constructor.void.params.message.value} />
 	</FieldGroup>
 
 	<FieldGroup>
@@ -216,7 +173,10 @@
 
 	<FieldGroup>
 		<FieldGroupLabel>Currency code</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. XCB; USD" bind:value={$constructor.void.params.currency.value} />
+		<FieldGroupText
+			placeholder="e.g. XCB; USD"
+			bind:value={$constructor.void.params.currency.value}
+		/>
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>
 </div>

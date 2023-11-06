@@ -6,12 +6,9 @@
 		FieldGroupNumber,
 		FieldGroupDateTime,
 		FieldGroupText,
-		FieldGroupRadioWithNumber,
-		ListBox,
-		ListBoxButton,
-		ListBoxMenu,
-		ListBoxOption
+		FieldGroupRadioWithNumber
 	} from '$lib/components';
+	import { ListboxV2 } from '$lib/components/listBoxV2';
 
 	import { TRANSPORT } from '$lib/data/transports.data';
 	import { join } from '$lib/helpers/join.helper';
@@ -50,58 +47,7 @@
 		<div class="[ flex flex-col items-stetch gap-4 ]">
 			{#if $constructor.ican.network !== 'other'}
 				<div in:fade>
-					<ListBox
-						className="[ grow ]"
-						bind:value={$constructor.ican.network}
-					>
-						<ListBoxButton id="transport-network">
-							<span class="[ inline-block truncate uppercase ]">{$constructor.ican.network}</span>
-							<span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									fill="currentColor"
-									aria-hidden="true"
-									class="w-5 h-5 text-gray-400"
-								>
-									<path
-										fill-rule="evenodd"
-										d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-										clip-rule="evenodd"
-									/>
-								</svg>
-							</span>
-						</ListBoxButton>
-
-						<ListBoxMenu items={TRANSPORT.ican} let:item>
-							<ListBoxOption value={item.value} let:selected>
-								<div class={join('[ inline-flex items-center gap-2 transition-all duration-200 ]')}>
-									<span class="[ truncate font-medium ]">{item.label}</span>
-									<span class="[ truncate font-medium text-gray-400 ]">{item.symbol}</span>
-								</div>
-
-								{#if selected}
-									<span
-										class="[ absolute inset-y-0 left-0 flex items-center pli-3 text-green-500 ]"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 20 20"
-											fill="currentColor"
-											aria-hidden="true"
-											class="w-5 h-5"
-										>
-											<path
-												fill-rule="evenodd"
-												d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-												clip-rule="evenodd"
-											/>
-										</svg>
-									</span>
-								{/if}
-							</ListBoxOption>
-						</ListBoxMenu>
-					</ListBox>
+					<ListboxV2 bind:value={$constructor.ican.network} items={TRANSPORT.ican} />
 				</div>
 			{/if}
 
@@ -156,14 +102,17 @@
 	<FieldGroup>
 		<FieldGroupLabel>Address / <abbr title="Name Service">NS</abbr> *</FieldGroupLabel>
 		<FieldGroupText
-			placeholder={
-				$constructor.ican.network === 'btc' ? 'e.g. 1BvBEx…' :
-				$constructor.ican.network === 'eth' ? 'e.g. 0x1abc…; name.eth' :
-				$constructor.ican.network === 'ltc' ? 'e.g. LbYvAb…' :
-				$constructor.ican.network === 'xmr' ? 'e.g. 4A3BcD…' :
-				'e.g. cb57bb…; name.tld'
-			}
-			bind:value={$constructor.ican.destination} />
+			placeholder={$constructor.ican.network === 'btc'
+				? 'e.g. 1BvBEx…'
+				: $constructor.ican.network === 'eth'
+				? 'e.g. 0x1abc…; name.eth'
+				: $constructor.ican.network === 'ltc'
+				? 'e.g. LbYvAb…'
+				: $constructor.ican.network === 'xmr'
+				? 'e.g. 4A3BcD…'
+				: 'e.g. cb57bb…; name.tld'}
+			bind:value={$constructor.ican.destination}
+		/>
 	</FieldGroup>
 
 	<FieldGroup>
@@ -174,9 +123,16 @@
 	</FieldGroup>
 
 	<FieldGroup>
-		<FieldGroupLabel>{$constructor.ican.isFiat ? 'Fiat currency' : 'Token code / Token address'}</FieldGroupLabel>
-		<FieldGroupText placeholder={$constructor.ican.isFiat ? 'e.g. CHF; EUR; USD; …' : 'e.g. CTN; 0x1ab…'} bind:value={$constructor.ican.params.currency.value} />
-		<FieldGroupAppendix>If left empty, the default is the network currency or local fiat.</FieldGroupAppendix>
+		<FieldGroupLabel
+			>{$constructor.ican.isFiat ? 'Fiat currency' : 'Token code / Token address'}</FieldGroupLabel
+		>
+		<FieldGroupText
+			placeholder={$constructor.ican.isFiat ? 'e.g. CHF; EUR; USD; …' : 'e.g. CTN; 0x1ab…'}
+			bind:value={$constructor.ican.params.currency.value}
+		/>
+		<FieldGroupAppendix
+			>If left empty, the default is the network currency or local fiat.</FieldGroupAppendix
+		>
 	</FieldGroup>
 
 	<FieldGroup>
@@ -188,13 +144,19 @@
 		<FieldGroup>
 			<FieldGroupLabel>Chain ID</FieldGroupLabel>
 			<FieldGroupText placeholder="e.g. 61" bind:value={$constructor.ican.chain} />
-			<FieldGroupAppendix>If left empty, the default network chain will be used.</FieldGroupAppendix>
+			<FieldGroupAppendix>If left empty, the default network chain will be used.</FieldGroupAppendix
+			>
 		</FieldGroup>
 	{/if}
 
 	<FieldGroup>
 		<div class="flex items-center">
-			<input type="checkbox" bind:checked={$constructor.ican.isDl} id="expirationCheckbox" on:change={handleExpirationChange} />
+			<input
+				type="checkbox"
+				bind:checked={$constructor.ican.isDl}
+				id="expirationCheckbox"
+				on:change={handleExpirationChange}
+			/>
 			<label for="expirationCheckbox" class="ml-2">Expiration (deadline)</label>
 		</div>
 	</FieldGroup>
@@ -202,14 +164,26 @@
 	{#if $constructor.ican.isDl}
 		<FieldGroup>
 			<FieldGroupLabel>Expiration Date</FieldGroupLabel>
-			<FieldGroupDateTime id="expirationInput" min={getCurrentDateTime()} bind:value={timeDateValue} bind:unixTimestamp={$constructor.ican.params.dl.value} />
-			<FieldGroupAppendix>Value is in the local timezone. The defined breakpoint is excluded.</FieldGroupAppendix>
+			<FieldGroupDateTime
+				id="expirationInput"
+				min={getCurrentDateTime()}
+				bind:value={timeDateValue}
+				bind:unixTimestamp={$constructor.ican.params.dl.value}
+			/>
+			<FieldGroupAppendix
+				>Value is in the local timezone. The defined breakpoint is excluded.</FieldGroupAppendix
+			>
 		</FieldGroup>
 	{/if}
 
 	<FieldGroup>
 		<div class="flex items-center">
-			<input type="checkbox" bind:checked={$constructor.ican.isRc} id="recurringCheckbox" on:change={handleRecurringChange} />
+			<input
+				type="checkbox"
+				bind:checked={$constructor.ican.isRc}
+				id="recurringCheckbox"
+				on:change={handleRecurringChange}
+			/>
 			<label for="recurringCheckbox" class="ml-2">Recurring payments</label>
 		</div>
 	</FieldGroup>
@@ -223,6 +197,7 @@
 				{ name: 'Daily', value: 'd', hasNumberInput: true }
 			]}
 			defaultChecked={$constructor.ican.params.rc.value}
-			bind:outputValue={$constructor.ican.params.rc.value} />
+			bind:outputValue={$constructor.ican.params.rc.value}
+		/>
 	{/if}
 </div>
