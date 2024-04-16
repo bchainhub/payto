@@ -3,6 +3,7 @@ export const META_CONTENT = {
 	iban: (props: Record<string, any>) => props.iban || '',
 	bic: (props: Record<string, any>) => props.bic || '',
 	upi: (props: Record<string, any>) => props.accountAlias || '',
+	pix: (props: Record<string, any>) => props.accountAlias || '',
 	ach: (props: { accountNumber?: string }) => {
 		let account = /^\d+$/.test(props.accountNumber || '') ? props.accountNumber : '';
 		return account;
@@ -12,14 +13,14 @@ export const META_CONTENT = {
 
 		if (
 			props.transport === 'geo' &&
-			Boolean(props.params.loc.lang) &&
-			Boolean(props.params.loc.long)
+			Boolean(props.params.loc.lat) &&
+			Boolean(props.params.loc.lon)
 		) {
-			content = `${props.params.loc.lang}:${props.params.loc.long}`;
+			content = `${props.params.loc.lat}:${props.params.loc.lon}`;
 		}
 
 		if (props.transport === 'plus') {
-			content = props.params.loc.plus.toUpperCase();
+			content = props.params.loc.plus;
 		}
 
 		return content || '';

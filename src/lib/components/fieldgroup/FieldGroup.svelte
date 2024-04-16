@@ -5,7 +5,9 @@
 	setFieldGroupContext();
 
 	export let classValue: string = '';
-	let computedClass: string = join('[ flex flex-col items-stretch gap-2 ]', classValue);
+	export let flexType: string = 'flex-col';
+	export let itemPosition: string = 'items-stretch';
+	let computedClass: string = join('[ flex gap-2 ]', itemPosition, flexType, classValue);
 </script>
 
 <div class={computedClass}>

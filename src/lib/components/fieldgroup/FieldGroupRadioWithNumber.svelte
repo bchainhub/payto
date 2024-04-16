@@ -9,7 +9,7 @@
 	export let numberMin: number = 1;
 	export let numberMax: number = 365;
 	export let disabled: boolean = false;
-	export let outputValue: string = '';
+	export let outputValue: string | null = '';
 
 	let _disabled = disabled;
 	$: _disabled = disabled;

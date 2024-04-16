@@ -1,28 +1,51 @@
 import { writable, derived } from 'svelte/store';
 
-type BaseState = { _reactivityTrigger?: boolean };
+interface BaseState {
+	_reactivityTrigger?: boolean;
+}
 
-export const createStore = <TState extends Record<string, any>, TKey extends keyof TState>(
-	initial: TState & BaseState,
-	builder: Record<TKey, (props: any) => IOutput[]>
+export const createStore = (
+	initial: IComplexState & BaseState,
+	builders: {
+		networks: Record<string, (networkProps: ITransactionState, designProps: IDesignState) => IOutput[]>,
+	}
 ) => {
 	const state = structuredClone(initial);
-	const store = writable<TState & BaseState>(state);
+	const store = writable<IComplexState & BaseState>(state);
 
-	const reset = (name: keyof typeof initial) => () => {
-		store.update((currentState: TState & BaseState) => {
-			const deepClone = JSON.parse(JSON.stringify(initial[name]));
-			const updatedState = { ...currentState, [name]: deepClone, _reactivityTrigger: !currentState._reactivityTrigger };
-			return updatedState;
+	// Reset specific network state
+	const reset = (network: keyof IComplexState['networks']) => {
+		store.update(currentState => {
+			const deepClone = JSON.parse(JSON.stringify(initial.networks[network]));
+			currentState.networks[network] = deepClone;
+			currentState._reactivityTrigger = !currentState._reactivityTrigger;
+			return {...currentState};
 		});
 	};
 
-	const build = (name: TKey) => {
-		return derived(store, ($state: TState & BaseState) => {
-			const props = $state[name as keyof TState];
-			return builder[name](props);
+	// Reset design state
+	const resetDesign = () => {
+		store.update(currentState => {
+			const designClone = JSON.parse(JSON.stringify(initial.design));
+			currentState.design = designClone;
+			currentState._reactivityTrigger = !currentState._reactivityTrigger;
+			return {...currentState};
 		});
 	};
 
-	return { ...store, reset, build };
+	// Build derived stores for specific networks considering design parameters
+	const build = (network: keyof IComplexState['networks']) => {
+		return derived(store, $state => {
+			const networkProps = $state.networks[network];
+			const designProps = $state.design;
+			return builders.networks[network](networkProps, designProps);
+		});
+	};
+
+	return {
+		...store,
+		reset,
+		resetDesign,
+		build,
+	};
 };

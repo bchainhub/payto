@@ -9,8 +9,6 @@
 	<meta property="og:image" content="https://payto.money/icons/android-chrome-512x512.png" />
 </svelte:head>
 
-<div
-	class="[ flex flex-col items-stretch justify-between gap-8 ] [ container plb-4 mlb-4 ] [ lg:flex-row lg:min-bs-[62rem] lg:plb-8 lg:mlb-8 ]"
->
+<div>
 	<slot />
 </div>

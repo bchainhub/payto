@@ -15,6 +15,10 @@ html {
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
 	@apply bg-gray-900;
+	height: 100vh;
+	min-height: 100vh;
+	background-image: url("/images/tile.svg");
+	background-repeat: repeat;
 }
 
 body {
@@ -22,9 +26,9 @@ body {
 	-webkit-tap-highlight-color: transparent;
 	color-scheme: dark;
 	@apply text-gray-50;
-	height: 100%;
-	background-image: url("/images/tile.svg");
-	background-repeat: repeat;
+	min-height: 100vh;
+	min-height: -webkit-fill-available;
+	min-height: -moz-available;
 }
 
 ::selection {
@@ -77,6 +81,10 @@ input[type="checkbox"]:checked::before {
 	color: #fff;
 }
 
+h1 > input[type="checkbox"]:checked::before {
+	content: "";
+}
+
 input[type="checkbox"]:hover, [type='radio']:hover {
 	border-color: var(--color-green-core);
 }
@@ -93,4 +101,8 @@ abbr {
 abbr:where([title]) {
     -webkit-text-decoration: underline rgb(249 250 251 / .5) dotted;
     text-decoration: underline rgb(249 250 251 / .5) dotted;
+}
+
+input[type="color"] {
+	cursor: pointer;
 }
