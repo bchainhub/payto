@@ -269,16 +269,18 @@ const BUILDER = {
 				fullProps.params.loc.lon) {
 				fullProps.params.loc.value = `${fullProps.params.loc.lat}:${fullProps.params.loc.lon}`;
 			}
-			if (fullProps.params &&
+			else if (fullProps.params &&
 				fullProps.params.loc &&
 				fullProps.params.loc.plus &&
 				fullProps.transport === 'plus') {
 				fullProps.params.loc.value = fullProps.params.loc.plus.toUpperCase();
 			}
-			if (fullProps.params &&
+			else if (fullProps.params &&
 				fullProps.params.loc &&
 				fullProps.transport === 'other') {
 				fullProps.params.loc.value = fullProps.params.loc.other;
+			} else {
+				fullProps.params.loc.value = '';
 			}
 			const payload = [
 				{

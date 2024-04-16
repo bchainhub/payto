@@ -25,6 +25,23 @@
 	$: other = $constructor.networks[type].other ?? undefined;
 	$: paymentNetwork = getNetwork($constructor.networks[type], type, true);
 
+	let locVal: string | undefined = undefined;
+	$: if (type === 'void' && (paymentNetwork === 'geo' || paymentNetwork === 'plus')) {
+		if (paymentNetwork === 'geo') {
+			if ($constructor.networks[type].params.loc.lat && $constructor.networks[type].params.loc.lon) {
+				locVal = 'geo:' + $constructor.networks[type].params.loc.value.replace(":", ",");
+			} else {
+				locVal = undefined;
+			}
+		} else if (paymentNetwork === 'plus') {
+			if ($constructor.networks[type].params.loc.plus) {
+				locVal = 'comgooglemaps://?q=' + $constructor.networks[type].params.loc.value;
+			} else {
+				locVal = undefined;
+			}
+		}
+	}
+
 	$: formatter = new ExchNumberFormat(undefined, {
 		style: 'currency',
 		currency: getCurrency($constructor.networks[type], type),
@@ -119,6 +136,22 @@
 						<div class="text-sm">Item</div>
 						<div class="text-xl font-semibold break-words">
 							{item}
+						</div>
+					</div>
+				</div>
+			{/if}
+			{#if type === 'void' && (paymentNetwork === 'geo' || paymentNetwork === 'plus')}
+				<div class="flex justify-between items-center mb-2">
+					<div class={`${rtl ? 'text-right' : 'text-left'} w-full`}>
+						<div class="text-sm">Navigate</div>
+						<div class="text-xl font-semibold break-words">
+							<a
+								class={`[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ] [ ${locVal ? 'cursor-pointer' : 'cursor-not-allowed' } ]`}
+								style="color: {colorF};"
+								href={locVal}
+								target="_blank"
+								rel="noreferrer"
+							>Open the navigation</a>
 						</div>
 					</div>
 				</div>
