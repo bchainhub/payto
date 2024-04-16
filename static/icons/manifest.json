@@ -1,6 +1,10 @@
 {
 	"name": "PaytoMoney",
 	"short_name": "Payto",
+	"display": "standalone",
+	"theme_color": "#77bb65",
+	"background_color": "#111827",
+	"description": "PaytoMoney is a simple and secure way to send and receive money.",
 	"icons": [
 		{
 			"src": "/icons/icon-48x48.png",
@@ -32,8 +36,5 @@
 			"sizes": "512x512",
 			"type": "image/png"
 		}
-	],
-	"theme_color": "#77bb65",
-	"background_color": "#111827",
-	"display": "standalone"
+	]
 }

@@ -1,5 +1,6 @@
 import { META_CONTENT } from '$lib/data/meta-content.data';
 import { checkValidity } from '$lib/helpers/check-validity.helper';
+import { calculateColorDistance } from '$lib/helpers/euclidean-distance.helper';
 
 /**
  * It takes a list of payloads and a set of props, and returns a link
@@ -13,27 +14,72 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 		.reduce((acc, payload) => acc.concat('/', payload.value || (payload.placeholder ? payload.placeholder : '')), 'payto:/');
 
 	if (props.params) {
-		const { amount, currency, ...rest } = props.params;
+		const { amount, currency, design, split, ...rest } = props.params;
 		const validParams = Object.entries<{ value: string | undefined; mandatory?: boolean }>(rest)
 			.filter(([_, param]) => param.mandatory || Boolean(param.value))
 			.map(([key, param]) => [kebabize(key), param.value]);
 
 		const searchParams = new URLSearchParams(validParams as string[][]);
 
+		// Amount transformer
 		if (amount.mandatory) {
 			searchParams.set(
-				(props.isFiat ? 'fiat' : 'amount'),
+				'amount',
 				currency.value
 				? caseCurrency(currency.value) + ':' + amount.value
 				: amount.value
 			);
 		} else if (amount.value || currency.value) {
 			searchParams.set(
-				(props.isFiat ? 'fiat' : 'amount'),
+				'amount',
 				(amount.value && currency.value)
 				? caseCurrency(currency.value) + ':' + amount.value
 				: (currency.value ? caseCurrency(currency.value) + ':' : amount.value)
 			);
+		}
+
+		// Split transformer
+		if (split && split.value && split.address && amount.value>0 && ((!split.isPercent && split.value<amount.value) || (split.isPercent && split.value<100))) {
+			searchParams.set(
+				'split',
+				split.isPercent
+				? 'p:' + split.value + '@' + split.address
+				: split.value + '@' + split.address
+			);
+		}
+
+		// Design transformer
+		if (design) {
+			const { org, item, colorF, colorB, barcode } = design;
+			if (org) searchParams.set('org', org);
+			if (item) searchParams.set('item', item);
+			if (colorB && colorF && colorB !== '#77bc65' && colorF !== '#192a14') {
+				const similar = calculateColorDistance(colorB, colorF);
+				if (similar >= 100) {
+					searchParams.set('color-f', colorF.substring(1));
+					searchParams.set('color-b', colorB.substring(1));
+				} else {
+					searchParams.delete('color-f');
+					searchParams.delete('color-b');
+				}
+			} else if (colorF && colorF !== '#192a14') {
+				const similar = calculateColorDistance('#77bc65', colorF);
+				if (similar >= 100) {
+					searchParams.set('color-f', colorF.substring(1));
+				} else {
+					searchParams.delete('color-f');
+				}
+			} else if (colorB && colorB !== '#77bc65') {
+				const similar = calculateColorDistance('#192a14', colorB);
+				if (similar >= 100) {
+					searchParams.set('color-b', colorB.substring(1));
+				} else {
+					searchParams.delete('color-b');
+				}
+			}
+			if (barcode !== 'qr') {
+				if (barcode) searchParams.set('barcode', barcode);
+			}
 		}
 
 		if (searchParams.toString()) {
@@ -48,25 +94,25 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
  * camelCase to kebab-case
  * @param str - String to be kebabized
  */
-const kebabize = (str: any) => str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($: any, ofs: any) => (ofs ? "-" : "") + $.toLowerCase());
+const kebabize = (str: string | undefined) => str ? str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($: any, ofs: any) => (ofs ? "-" : "") + $.toLowerCase()): str;
 
 /**
  * Convert required characters back from encodeURIComponent
  * @param str - String to be decoded
  */
-const uriNormalize = (str: any) => str.replace(/%3A/g,':').replace(/%40/g,'@');
+const uriNormalize = (str: string | undefined) => str ? str.replace(/%3A/g,':').replace(/%40/g,'@') : str;
 
 /**
  * Convert currency to lower case except Smart Contracts
  * @param str - String to be converted
  */
-const caseCurrency = (str: any) => str.startsWith("0x") ? str : str.toLowerCase();
+const caseCurrency = (str: string | undefined) => (str && str.startsWith("0x")) ? str : (str ? str.toLowerCase(): str);
 
 /**
  * Shorten name for title
  * @param str - String to be shorten
  */
-const shortenTitle = (str: any) => str.length > 10 ? `${str.slice(0,4)}…${str.slice(-4)}` : str;
+const shortenTitle = (str: string | undefined) => (str && str.length > 10) ? `${str.slice(0,4)}…${str.slice(-4)}` : str;
 
 /**
  * It takes a prefix and a props object, and returns a title
@@ -92,7 +138,7 @@ const getTitle = (prefix: 'pay' | 'donate', props: Record<string, any>) => {
 	} else {
 		namePrefix = prefix[0].toUpperCase() + prefix.slice(1);
 	}
-	let title = `${namePrefix} via ${network.toUpperCase()}`;
+	let title = `${namePrefix} via ${network ? network.toUpperCase() : ''}`;
 	if (props.chain > 0 && (props.network === 'eth' || props.network === 'other')) {
 		title += `@${props.chain}`;
 	}
@@ -139,36 +185,20 @@ const generateHtmlLink = (link: string, props: Record<string, any>) => {
  * page.
  */
 const generateHtmlPaymentButton = (link: string, props: Record<string, any>) => {
-	const style1 = `
-position:relative;
+	const style = `
 cursor:pointer;
-background:#77bb65;
-border:0;
-border-radius:50px;
-padding:10px 20px 10px 53px;
-color:#f6fff4;
-font-size:15px;
-font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-font-weight:600;
+color:#72bd5e;
+padding:6px 12px;
+background:#72bd5e20;
+font:15px/20px BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+border:1px solid #639953;
+border-radius:16px;
 text-decoration:none;
-top:5px;
-bottom:5px;
-text-shadow: 0px 0px 1px #275b19;
-white-space: nowrap;
+height:fit-content;
+transition: all .15s cubic-bezier(.4,0,.2,1);
+white-space:nowrap;
 `;
-	const style2 = `
-font-size:1.1em;
-background:#518842;
-border-radius:100px;
-border:4px solid #77bb65;
-padding:8px 10px;
-margin:10px;
-position:absolute;
-top:-15px;
-left:-10px;
-`;
-
-	return `<a href="${link}" style="${style1}">${getTitle('pay', props)}<span style="${style2}">💸</span></a>`;
+	return `<a href="${link}" class="ptPay" style="${style}">💸 ${getTitle('pay', props)}</a><style>a.ptPay:hover{border-color:#95e87f !important;color:#95e87f !important}</style>`;
 };
 
 /**
@@ -179,36 +209,20 @@ left:-10px;
  * @returns A string of HTML code that will be used to create a donation button.
  */
 const generateHtmlDonationButton = (link: string, props: Record<string, any>) => {
-	const style1 = `
-position:relative;
+	const style = `
 cursor:pointer;
-background:#c2a04b;
-border:0;
-border-radius:50px;
-padding:10px 20px 10px 53px;
-color:#f5ecd3;
-font-size:15px;
-font-family:BlinkMacSystemFont,-apple-system,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-font-weight:600;
+color:#849dfc;
+padding:6px 12px;
+background:#849dfc20;
+font:15px/20px BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+border:1px solid #878fc5;
+border-radius:16px;
 text-decoration:none;
-top:5px;
-bottom:5px;
-text-shadow: 0px 0px 1px #7d601a;
-white-space: nowrap;
+height:fit-content;
+transition:all .15s cubic-bezier(.4, 0, .2, 1);
+white-space:nowrap;
 `;
-	const style2 = `
-font-size:1.1em;
-background:#9e8146;
-border-radius:100px;
-border:4px solid #c2a04b;
-padding:8px 10px;
-margin:10px;
-position:absolute;
-top:-15px;
-left:-10px;
-`;
-
-	return `<a href="${link}" style="${style1}">${getTitle('donate', props)}<span style="${style2}">🎁</span></a>`;
+	return `<a href="${link}" class="ptDonate" style="${style}">💠 ${getTitle('donate', props)}</a><style>a.ptDonate:hover{border-color:#b6c2f4 !important;color:#b6c2f4 !important}</style>`;
 };
 
 /**
@@ -229,9 +243,9 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 		} else {
 			if(checkValidity(props.other)) {
 				if(props.chain > 0) {
-					property += `:${props.other.toLowerCase()}@${props.chain}`;
+					property += `:${props.other ? props.other.toLowerCase() : props.other}@${props.chain}`;
 				} else {
-					property += `:${props.other.toLowerCase()}`;
+					property += `:${props.other ? props.other.toLowerCase() : props.other}`;
 				}
 			}
 		}
@@ -243,7 +257,7 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 		if(props.transport !== 'other') {
 			property += `:${props.transport}`;
 		} else {
-			property += `:${props.other.toLowerCase()}`;
+			property += `:${props.other ? props.other.toLowerCase(): props.other}`;
 		}
 	}
 

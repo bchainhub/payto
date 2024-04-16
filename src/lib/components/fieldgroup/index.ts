@@ -1,4 +1,5 @@
 export { default as FieldGroup } from './FieldGroup.svelte';
+export { default as FieldGroupColorPicker } from './FieldGroupColorPicker.svelte';
 export { default as FieldGroupLabel } from './FieldGroupLabel.svelte';
 export { default as FieldGroupText } from './FieldGroupText.svelte';
 export { default as FieldGroupMiniNumber } from './FieldGroupMiniNumber.svelte';

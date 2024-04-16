@@ -1,79 +1,94 @@
-export const TRANSPORT = {
+export const TRANSPORT: ITransportTypes = {
 	ican: [
 		{
 			value: 'xcb',
 			label: 'Core',
-			symbol: 'XCB'
+			ticker: 'XCB',
+			symbol: '₡',
+			tokens: true
 		},
 		{
 			value: 'btc',
 			label: 'Bitcoin',
-			symbol: 'BTC'
+			ticker: 'BTC',
+			symbol: '₿'
 		},
 		{
 			value: 'eth',
 			label: 'Ethereum',
-			symbol: 'ETH'
+			ticker: 'ETH',
+			symbol: 'Ξ',
+			tokens: true
 		},
 		{
 			value: 'ltc',
 			label: 'Litecoin',
-			symbol: 'LTC'
+			ticker: 'LTC',
+			symbol: 'Ł'
 		},
 		{
 			value: 'xmr',
 			label: 'Monero',
-			symbol: 'XMR'
+			ticker: 'XMR',
+			symbol: 'ɱ'
 		},
 		{
 			value: 'other',
 			label: 'Other',
-			symbol: ''
+			ticker: '',
+			tokens: true
 		}
 	],
 	iban: [
 		{
 			value: 'iban',
 			label: 'IBAN',
-			symbol: ''
+			ticker: ''
 		}
 	],
 	upi: [
 		{
 			value: 'upi',
 			label: 'UPI',
-			symbol: ''
+			ticker: ''
+		}
+	],
+	pix: [
+		{
+			value: 'pix',
+			label: 'PIX',
+			ticker: ''
 		}
 	],
 	ach: [
 		{
 			value: 'ach',
 			label: 'ACH',
-			symbol: ''
+			ticker: ''
 		}
 	],
 	bic: [
 		{
 			value: 'bic',
 			label: 'BIC',
-			symbol: ''
+			ticker: ''
 		}
 	],
 	void: [
 		{
 			value: 'geo',
 			label: 'Geolocation (Decimal Degrees)',
-			symbol: ''
+			ticker: ''
 		},
 		{
 			value: 'plus',
 			label: 'Plus Code',
-			symbol: ''
+			ticker: ''
 		},
 		{
 			value: 'other',
 			label: 'Other',
-			symbol: ''
+			ticker: ''
 		}
 	]
 };

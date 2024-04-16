@@ -18,12 +18,12 @@
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
 		<label id="transport-network-label" for="transport-network">Transport Network *</label>
 		<div class="[ flex flex-col items-stetch gap-4 ]">
-			{#if $constructor.void.transport !== 'other'}
+			{#if $constructor.networks.void.transport !== 'other'}
 				<div in:fade>
-					<Listbox bind:value={$constructor.void.transport} items={TRANSPORT.void} />
+					<Listbox bind:value={$constructor.networks.void.transport} items={TRANSPORT.void} />
 				</div>
 			{/if}
-			{#if $constructor.void.transport === 'other'}
+			{#if $constructor.networks.void.transport === 'other'}
 				<div class={join('[ flex items-center ]', '[ relative ]')} in:fade>
 					<button
 						class={join(
@@ -33,7 +33,7 @@
 						)}
 						type="button"
 						title="Back to network menu options"
-						on:pointerdown={() => ($constructor.void.transport = 'geo')}
+						on:pointerdown={() => ($constructor.networks.void.transport = 'geo')}
 					>
 						<svg
 							class={join('[ bs-4 is-4 ]')}
@@ -64,7 +64,7 @@
 						autocomplete="off"
 						aria-labelledby="transport-network-label"
 						style="text-transform: uppercase"
-						bind:value={$constructor.void.other}
+						bind:value={$constructor.networks.void.other}
 					/>
 				</div>
 			{/if}
@@ -73,7 +73,7 @@
 
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
 		<label id="exchange-point-label" for="exchange-point">Location</label>
-		{#if $constructor.void.transport === 'geo'}
+		{#if $constructor.networks.void.transport === 'geo'}
 			<div class="[ flex gap-4 ]">
 				<input
 					class={join(
@@ -85,7 +85,7 @@
 					placeholder="Latitude"
 					autocomplete="off"
 					aria-labelledby="exchange-point-label"
-					bind:value={$constructor.void.params.loc.lang}
+					bind:value={$constructor.networks.void.params.loc.lat}
 				/>
 				<input
 					class={join(
@@ -98,20 +98,20 @@
 					placeholder="Longitude"
 					autocomplete="off"
 					aria-labelledby="exchange-point-label"
-					bind:value={$constructor.void.params.loc.long}
+					bind:value={$constructor.networks.void.params.loc.lon}
 				/>
 			</div>
 			<small class="[ -mbs-1 text-gray-400 ]"
 				>Search for the geocordinates - <a
 					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
-					href="https://gps-coordinates.org/"
+					href="https://www.latlong.net/"
 					target="_blank"
 					rel="noreferrer">Latitude & Longitude (DD - Decimal Degrees)</a
 				></small
 			>
 		{/if}
 
-		{#if $constructor.void.transport === 'plus'}
+		{#if $constructor.networks.void.transport === 'plus'}
 			<input
 				class={join(
 					'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
@@ -124,7 +124,7 @@
 				autocomplete="off"
 				aria-labelledby="exchange-point-label"
 				style="text-transform: uppercase"
-				bind:value={$constructor.void.params.loc.plus}
+				bind:value={$constructor.networks.void.params.loc.plus}
 			/>
 			<small class="[ -mbs-1 text-gray-400 ]"
 				>Search for the <a
@@ -136,7 +136,7 @@
 			>
 		{/if}
 
-		{#if $constructor.void.transport === 'other'}
+		{#if $constructor.networks.void.transport === 'other'}
 			<input
 				class={join(
 					'[ is-full bs-12 plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
@@ -148,7 +148,7 @@
 				placeholder="Point"
 				autocomplete="off"
 				aria-labelledby="exchange-point-label"
-				bind:value={$constructor.void.params.loc.other}
+				bind:value={$constructor.networks.void.params.loc.other}
 			/>
 		{/if}
 	</div>
@@ -157,25 +157,32 @@
 		<FieldGroupLabel>Beneficiary Full Name</FieldGroupLabel>
 		<FieldGroupText
 			placeholder="e.g. John Doe"
-			bind:value={$constructor.void.params.receiverName.value}
+			bind:value={$constructor.networks.void.params.receiverName.value}
 		/>
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Message for Beneficiary</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. ID001" bind:value={$constructor.void.params.message.value} />
+		<FieldGroupText
+			placeholder="e.g. ID001"
+			bind:value={$constructor.networks.void.params.message.value}
+		/>
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Amount</FieldGroupLabel>
-		<FieldGroupNumber placeholder="e.g. 3.14" bind:value={$constructor.void.params.amount.value} />
+		<FieldGroupNumber
+			placeholder="e.g. 3.14"
+			bind:value={$constructor.networks.void.params.amount.value}
+		/>
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>Currency code</FieldGroupLabel>
 		<FieldGroupText
 			placeholder="e.g. XCB; USD"
-			bind:value={$constructor.void.params.currency.value}
+			bind:value={$constructor.networks.void.params.currency.value}
+			classValue="uppercase"
 		/>
 		<FieldGroupAppendix>Empty value uses the default network currency.</FieldGroupAppendix>
 	</FieldGroup>

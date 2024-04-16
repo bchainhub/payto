@@ -16,6 +16,11 @@
 	import { fade, fly } from 'svelte/transition';
 
 	let timeDateValue = '';
+	$: classUpperValue =
+		$constructor.networks.ican.params?.currency?.value && typeof $constructor.networks.ican.params.currency.value === 'string'
+			? (!$constructor.networks.ican.params.currency.value.toLowerCase().startsWith('0x') ? 'uppercase' : '')
+			: '';
+	$: tokens = TRANSPORT.ican.find((item) => item.value === $constructor.networks.ican.network)?.tokens;
 
 	function getCurrentDateTime() {
 		const now = new Date();
@@ -27,16 +32,30 @@
 		return `${year}-${month}-${day}T${hours}:${minutes}`;
 	}
 
+	function handleFiatChange() {
+		if (!$constructor.networks.ican.isFiat) {
+			$constructor.networks.ican.params.fiat.value = undefined;
+		}
+	}
+
+	function handleSplitChange() {
+		if (!$constructor.networks.ican.isSplit) {
+			$constructor.networks.ican.params.split.isPercent = undefined;
+			$constructor.networks.ican.params.split.value = undefined;
+			$constructor.networks.ican.params.split.address = undefined;
+		}
+	}
+
 	function handleExpirationChange() {
-		if (!$constructor.ican.isDl) {
+		if (!$constructor.networks.ican.isDl) {
 			timeDateValue = '';
-			$constructor.ican.params.dl.value = undefined;
+			$constructor.networks.ican.params.dl.value = undefined;
 		}
 	}
 
 	function handleRecurringChange() {
-		if (!$constructor.ican.isRc) {
-			$constructor.ican.params.rc.value = undefined;
+		if (!$constructor.networks.ican.isRc) {
+			$constructor.networks.ican.params.rc.value = undefined;
 		}
 	}
 </script>
@@ -45,13 +64,13 @@
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
 		<label id="transport-network-label" for="transport-network">Transport Network *</label>
 		<div class="[ flex flex-col items-stetch gap-4 ]">
-			{#if $constructor.ican.network !== 'other'}
+			{#if $constructor.networks.ican.network !== 'other'}
 				<div in:fade>
-					<Listbox bind:value={$constructor.ican.network} items={TRANSPORT.ican} />
+					<Listbox bind:value={$constructor.networks.ican.network} items={TRANSPORT.ican} />
 				</div>
 			{/if}
 
-			{#if $constructor.ican.network === 'other'}
+			{#if $constructor.networks.ican.network === 'other'}
 				<div class={join('[ flex items-center ]', '[ relative ]')} in:fade>
 					<button
 						class={join(
@@ -61,7 +80,7 @@
 						)}
 						type="button"
 						title="Back to network menu options"
-						on:pointerdown={() => ($constructor.ican.network = 'xcb')}
+						on:pointerdown={() => ($constructor.networks.ican.network = 'xcb')}
 					>
 						<svg
 							class={join('[ bs-4 is-4 ]')}
@@ -92,7 +111,7 @@
 						autocomplete="off"
 						aria-labelledby="transport-network-label"
 						style="text-transform: uppercase"
-						bind:value={$constructor.ican.other}
+						bind:value={$constructor.networks.ican.other}
 					/>
 				</div>
 			{/if}
@@ -102,50 +121,47 @@
 	<FieldGroup>
 		<FieldGroupLabel>Address / <abbr title="Name Service">NS</abbr> *</FieldGroupLabel>
 		<FieldGroupText
-			placeholder={$constructor.ican.network === 'btc'
+			placeholder={$constructor.networks.ican.network === 'btc'
 				? 'e.g. 1BvBEx…'
-				: $constructor.ican.network === 'eth'
+				: $constructor.networks.ican.network === 'eth'
 				? 'e.g. 0x1abc…; name.eth'
-				: $constructor.ican.network === 'ltc'
+				: $constructor.networks.ican.network === 'ltc'
 				? 'e.g. LbYvAb…'
-				: $constructor.ican.network === 'xmr'
+				: $constructor.networks.ican.network === 'xmr'
 				? 'e.g. 4A3BcD…'
 				: 'e.g. cb57bb…; name.tld'}
-			bind:value={$constructor.ican.destination}
+			bind:value={$constructor.networks.ican.destination}
 		/>
 	</FieldGroup>
 
-	<FieldGroup>
-		<div class="flex items-center">
-			<input type="checkbox" bind:checked={$constructor.ican.isFiat} id="fiatCheckbox" />
-			<label for="fiatCheckbox" class="ml-2">Fiat currency (government-issued money)</label>
-		</div>
-	</FieldGroup>
+	{#if tokens}
+		<FieldGroup>
+			<FieldGroupLabel>Token code / Token address</FieldGroupLabel>
+			<FieldGroupText
+				placeholder="e.g. CTN; 0x1ab…"
+				bind:value={$constructor.networks.ican.params.currency.value}
+				classValue={classUpperValue}
+			/>
+			<FieldGroupAppendix>If left empty, the default is the network currency or local fiat.</FieldGroupAppendix>
+		</FieldGroup>
+	{/if}
 
 	<FieldGroup>
-		<FieldGroupLabel
-			>{$constructor.ican.isFiat ? 'Fiat currency' : 'Token code / Token address'}</FieldGroupLabel
-		>
-		<FieldGroupText
-			placeholder={$constructor.ican.isFiat ? 'e.g. CHF; EUR; USD; …' : 'e.g. CTN; 0x1ab…'}
-			bind:value={$constructor.ican.params.currency.value}
+		<FieldGroupLabel>{($constructor.networks.ican.isFiat ? 'Fiat Amount' : 'Amount')}</FieldGroupLabel>
+		<FieldGroupNumber
+			placeholder="e.g. 3.14"
+			bind:value={$constructor.networks.ican.params.amount.value}
 		/>
-		<FieldGroupAppendix
-			>If left empty, the default is the network currency or local fiat.</FieldGroupAppendix
-		>
 	</FieldGroup>
 
-	<FieldGroup>
-		<FieldGroupLabel>Amount</FieldGroupLabel>
-		<FieldGroupNumber placeholder="e.g. 3.14" bind:value={$constructor.ican.params.amount.value} />
-	</FieldGroup>
-
-	{#if $constructor.ican.network === 'eth' || $constructor.ican.network === 'other'}
+	{#if $constructor.networks.ican.network === 'eth' || $constructor.networks.ican.network === 'other'}
 		<FieldGroup>
 			<FieldGroupLabel>Chain ID</FieldGroupLabel>
-			<FieldGroupText placeholder="e.g. 61" bind:value={$constructor.ican.chain} />
-			<FieldGroupAppendix>If left empty, the default network chain will be used.</FieldGroupAppendix
-			>
+			<FieldGroupText
+				placeholder="e.g. 61"
+				bind:value={$constructor.networks.ican.chain}
+			/>
+			<FieldGroupAppendix>If left empty, the default network chain will be used.</FieldGroupAppendix>
 		</FieldGroup>
 	{/if}
 
@@ -153,26 +169,47 @@
 		<div class="flex items-center">
 			<input
 				type="checkbox"
-				bind:checked={$constructor.ican.isDl}
-				id="expirationCheckbox"
-				on:change={handleExpirationChange}
+				bind:checked={$constructor.networks.ican.isFiat}
+				id="fiatCheckbox"
+				on:change={handleFiatChange}
 			/>
-			<label for="expirationCheckbox" class="ml-2">Expiration (deadline)</label>
+			<label for="fiatCheckbox" class="ml-2">Converting Fiat Currency to Digital Assets</label>
 		</div>
 	</FieldGroup>
 
-	{#if $constructor.ican.isDl}
+	{#if $constructor.networks.ican.isFiat}
+		<FieldGroup>
+			<FieldGroupLabel>Fiat currency (government-issued money)</FieldGroupLabel>
+			<FieldGroupText
+				placeholder="e.g. CHF; EUR; USD; …"
+				classValue="uppercase"
+				bind:value={$constructor.networks.ican.params.fiat.value}
+			/>
+		</FieldGroup>
+	{/if}
+
+	<FieldGroup>
+		<div class="flex items-center">
+			<input
+				type="checkbox"
+				bind:checked={$constructor.networks.ican.isDl}
+				id="expirationCheckbox"
+				on:change={handleExpirationChange}
+			/>
+			<label for="expirationCheckbox" class="ml-2">Expiration (Deadline)</label>
+		</div>
+	</FieldGroup>
+
+	{#if $constructor.networks.ican.isDl}
 		<FieldGroup>
 			<FieldGroupLabel>Expiration Date</FieldGroupLabel>
 			<FieldGroupDateTime
 				id="expirationInput"
 				min={getCurrentDateTime()}
 				bind:value={timeDateValue}
-				bind:unixTimestamp={$constructor.ican.params.dl.value}
+				bind:unixTimestamp={$constructor.networks.ican.params.dl.value}
 			/>
-			<FieldGroupAppendix
-				>Value is in the local timezone. The defined breakpoint is excluded.</FieldGroupAppendix
-			>
+			<FieldGroupAppendix>Value is in the local timezone. The defined breakpoint is excluded.</FieldGroupAppendix>
 		</FieldGroup>
 	{/if}
 
@@ -180,7 +217,7 @@
 		<div class="flex items-center">
 			<input
 				type="checkbox"
-				bind:checked={$constructor.ican.isRc}
+				bind:checked={$constructor.networks.ican.isRc}
 				id="recurringCheckbox"
 				on:change={handleRecurringChange}
 			/>
@@ -188,7 +225,7 @@
 		</div>
 	</FieldGroup>
 
-	{#if $constructor.ican.isRc}
+	{#if $constructor.networks.ican.isRc}
 		<FieldGroupRadioWithNumber
 			options={[
 				{ name: 'Yearly', value: 'y' },
@@ -196,8 +233,62 @@
 				{ name: 'Weekly', value: 'w' },
 				{ name: 'Daily', value: 'd', hasNumberInput: true }
 			]}
-			defaultChecked={$constructor.ican.params.rc.value}
-			bind:outputValue={$constructor.ican.params.rc.value}
+			defaultChecked={$constructor.networks.ican.params.rc.value}
+			bind:outputValue={$constructor.networks.ican.params.rc.value}
 		/>
+	{/if}
+
+	<FieldGroup>
+		<div class="flex items-center">
+			<input
+				type="checkbox"
+				bind:checked={$constructor.networks.ican.isSplit}
+				id="splitCheckbox"
+				on:change={handleSplitChange}
+			/>
+			<label for="splitCheckbox" class="ml-2">Transaction split</label>
+		</div>
+	</FieldGroup>
+
+	{#if $constructor.networks.ican.isSplit}
+		<FieldGroup>
+			<FieldGroupLabel>Address / <abbr title="Name Service">NS</abbr></FieldGroupLabel>
+			<FieldGroupText
+			placeholder={$constructor.networks.ican.network === 'btc'
+				? 'e.g. 1BvBEx…'
+				: $constructor.networks.ican.network === 'eth'
+				? 'e.g. 0x1abc…; name.eth'
+				: $constructor.networks.ican.network === 'ltc'
+				? 'e.g. LbYvAb…'
+				: $constructor.networks.ican.network === 'xmr'
+				? 'e.g. 4A3BcD…'
+				: 'e.g. cb57bb…; name.tld'}
+				bind:value={$constructor.networks.ican.params.split.address}
+			/>
+			<FieldGroupAppendix>The amount will be splitted and two transactions will be transmitted.</FieldGroupAppendix>
+		</FieldGroup>
+
+		<FieldGroup>
+			<FieldGroupLabel>
+				<div class="flex items-center">
+					<span class="mr-3">Amount ({$constructor.networks.ican.params.split.isPercent ? 'Percentage' : 'Value'})</span>
+					<input
+						type="checkbox"
+						bind:checked={$constructor.networks.ican.params.split.isPercent}
+						id="splitPCheckbox"
+					/>
+					<label for="splitPCheckbox" class="ml-2">Percentage</label>
+				</div>
+			</FieldGroupLabel>
+
+			<FieldGroupNumber
+				placeholder={$constructor.networks.ican.params.split.isPercent ? 'e.g. 10%' : 'e.g. 3.14'}
+				bind:value={$constructor.networks.ican.params.split.value}
+				type="number"
+				min={0}
+				max={$constructor.networks.ican.params.split.isPercent ? 100 : undefined}
+			/>
+			{#if !$constructor.networks.ican.params.split.isPercent}<FieldGroupAppendix>Amount must be lower than requested amount.</FieldGroupAppendix>{/if}
+		</FieldGroup>
 	{/if}
 </div>

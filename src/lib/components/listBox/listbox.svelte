@@ -2,18 +2,22 @@
 	import { createListbox } from 'svelte-headlessui';
 	import { join } from '$lib/helpers/join.helper';
 	import Transition from 'svelte-transition';
+	import { constructor } from '$lib/store/constructor.store';
 
 	export let items: {
 		value: string;
 		label: string;
-		symbol: string;
+		ticker: string;
 	}[] = [];
-	export let value: string;
+	export let value: string | undefined;
 
 	const listbox = createListbox({ selected: items.find((i) => i.value === value) });
 
 	function onSelect(e: Event) {
 		value = (e as CustomEvent).detail.selected.value;
+		if ($constructor.networks.ican.params.currency.value) {
+			$constructor.networks.ican.params.currency.value = '';
+		}
 	}
 </script>
 
@@ -77,7 +81,7 @@
 						>
 							<div class={join('[ inline-flex items-center gap-2 transition-all duration-200 ]')}>
 								<span class="[ truncate font-medium ]">{value.label}</span>
-								<span class="[ truncate font-medium text-gray-400 ]">{value.symbol}</span>
+								<span class="[ truncate font-medium text-gray-400 ]">{value.ticker}</span>
 							</div>
 
 							{#if selected}
