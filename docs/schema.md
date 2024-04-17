@@ -264,6 +264,12 @@ Default barcode type is `qr`. Supported types are `qr`, `pdf417`, `aztec`.
 
 Example: `payto://xcb/${address}?amount=${asset_code}:${amount}&org=${company_name}&item=${item_name}&color-f=${foreground_color}&color-b=${background_color}&barcode=${barcode_type}`
 
+### Donations
+
+The PAYTO URI scheme can be used to facilitate donations to charitable organizations, non-profit groups, and other causes. The scheme allows to indicate donations (`donate`) with boolean value `1` for true and `0` or missing the declaration for false.
+
+Example: `payto://xcb/${address}?amount=${asset_code}:${amount}&donate=1`
+
 ### Security Considerations
 
 Always validate the authenticity and correctness of PAYTO URIs. Due to the irreversible nature of crypto asset transactions, users should confirm both the recipient's address and the amount before initiating a transfer.
