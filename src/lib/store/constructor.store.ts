@@ -267,7 +267,7 @@ const BUILDER = {
 				fullProps.params.loc &&
 				fullProps.params.loc.lat &&
 				fullProps.params.loc.lon) {
-				fullProps.params.loc.value = `${fullProps.params.loc.lat}:${fullProps.params.loc.lon}`;
+				fullProps.params.loc.value = `${fullProps.params.loc.lat},${fullProps.params.loc.lon}`;
 			}
 			else if (fullProps.params &&
 				fullProps.params.loc &&

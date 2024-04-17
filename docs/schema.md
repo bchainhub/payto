@@ -226,11 +226,11 @@ Supported payment types:
 
 - PIX (Central Bank of Brazil)
 
-Example: `payto://PIX/${PIX}?amount=${fiat_currency}:${amount}&id=${transaction_id}`
+Example: `payto://pix/${pix}?amount=${fiat_currency}:${amount}&id=${transaction_id}`
 
 ### Location
 
-The location field specifies the geolocation (or other identifier) for the transaction to take place. The location is expressed in latitude and longitude (in decimal degrees) for transport network `geo`; in plus code (from Google) for transport network `plus` and `other` can be custom defined. The location is required field.
+The location field specifies the geolocation (or other identifier) for the transaction to take place. The location is expressed in latitude and longitude (in decimal degrees) for transport network `geo`; in plus code (from Google) for transport network `plus` and `other` can be custom defined. The location is required field. Latitude and longitude is devided by `,`.
 
 You can generate:
 
@@ -243,8 +243,10 @@ Supported payment types:
 
 Examples:
 
-- `payto://void/geo?loc=${latitude}:${longitude}`
+- `payto://void/geo?loc=${latitude},${longitude}`
 - `payto://void/plus?loc=${plus_code}`
+
+Open navigation apps with the payto locations are possible via the [geo URI scheme](https://en.wikipedia.org/wiki/Geo_URI_scheme) or [comgooglemaps URI scheme](https://developers.google.com/maps/documentation/urls/get-started#universal-cross-platform-syntax), alternatively any other map application.
 
 ### Design
 
@@ -261,6 +263,12 @@ Foreground and background color are defined in hexadecimal format (without `#` s
 Default barcode type is `qr`. Supported types are `qr`, `pdf417`, `aztec`.
 
 Example: `payto://xcb/${address}?amount=${asset_code}:${amount}&org=${company_name}&item=${item_name}&color-f=${foreground_color}&color-b=${background_color}&barcode=${barcode_type}`
+
+### Donations
+
+The PAYTO URI scheme can be used to facilitate donations to charitable organizations, non-profit groups, and other causes. The scheme allows to indicate donations (`donate`) with boolean value `1` for true and `0` or missing the declaration for false.
+
+Example: `payto://xcb/${address}?amount=${asset_code}:${amount}&donate=1`
 
 ### Security Considerations
 
