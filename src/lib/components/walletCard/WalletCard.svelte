@@ -29,7 +29,7 @@
 	$: if (type === 'void' && (paymentNetwork === 'geo' || paymentNetwork === 'plus')) {
 		if (paymentNetwork === 'geo') {
 			if ($constructor.networks[type].params.loc.lat && $constructor.networks[type].params.loc.lon) {
-				locVal = 'geo:' + $constructor.networks[type].params.loc.value.replace(":", ",");
+				locVal = 'geo:' + $constructor.networks[type].params.loc.value;
 			} else {
 				locVal = undefined;
 			}

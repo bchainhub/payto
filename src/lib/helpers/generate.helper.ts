@@ -8,19 +8,19 @@ import { calculateColorDistance } from '$lib/helpers/euclidean-distance.helper';
  * and placeholder of each field.
  * @param props - The props object that was used to initialized store.
  */
-const generateLink = (payload: IPayload[], props: Record<string, any>) => {
+const generateLink = (payload: IPayload[], props: Record<string, any>, donate: boolean = false) => {
 	let link = payload
 		.filter((payload) => (payload.value !== undefined || payload.query === true))
 		.reduce((acc, payload) => acc.concat('/', payload.value || (payload.placeholder ? payload.placeholder : '')), 'payto:/');
 
+	const { amount, currency, design, split, fiat, ...rest } = props.params;
+	const validParams = Object.entries<{ value: string | undefined; mandatory?: boolean }>(rest)
+		.filter(([_, param]) => param.mandatory || Boolean(param.value))
+		.map(([key, param]) => [kebabize(key), param.value]);
+
+	const searchParams = new URLSearchParams(validParams as string[][]);
+
 	if (props.params) {
-		const { amount, currency, design, split, ...rest } = props.params;
-		const validParams = Object.entries<{ value: string | undefined; mandatory?: boolean }>(rest)
-			.filter(([_, param]) => param.mandatory || Boolean(param.value))
-			.map(([key, param]) => [kebabize(key), param.value]);
-
-		const searchParams = new URLSearchParams(validParams as string[][]);
-
 		// Amount transformer
 		if (amount.mandatory) {
 			searchParams.set(
@@ -36,6 +36,10 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 				? caseCurrency(currency.value) + ':' + amount.value
 				: (currency.value ? caseCurrency(currency.value) + ':' : amount.value)
 			);
+		}
+
+		if (fiat.value) {
+			searchParams.set('fiat', fiat.value.toLowerCase());
 		}
 
 		// Split transformer
@@ -81,10 +85,14 @@ const generateLink = (payload: IPayload[], props: Record<string, any>) => {
 				if (barcode) searchParams.set('barcode', barcode);
 			}
 		}
+	}
 
-		if (searchParams.toString()) {
-			link += '?' + uriNormalize(searchParams.toString());
-		}
+	if (donate) {
+		searchParams.set('donate', '1');
+	}
+
+	if (searchParams.toString()) {
+		link += '?' + uriNormalize(searchParams.toString());
 	}
 
 	return link;
@@ -100,7 +108,18 @@ const kebabize = (str: string | undefined) => str ? str.replace(/[A-Z]+(?![a-z])
  * Convert required characters back from encodeURIComponent
  * @param str - String to be decoded
  */
-const uriNormalize = (str: string | undefined) => str ? str.replace(/%3A/g,':').replace(/%40/g,'@') : str;
+const uriNormalize = (str: string | undefined): string | undefined => {
+	if (!str) return str;
+
+	const replacements: { [key: string]: string } = {
+		'%3A': ':',
+		'%40': '@',
+		'%2C': ','
+	};
+
+	const regex = new RegExp(Object.keys(replacements).join('|'), 'g');
+	return str.replace(regex, (match) => replacements[match]);
+};
 
 /**
  * Convert currency to lower case except Smart Contracts
@@ -234,15 +253,15 @@ white-space:nowrap;
 const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 	let property = `${type}`;
 	if (type === 'ican' && props.network) {
-		if(props.network !== 'other') {
-			if(props.network === 'eth' && props.chain > 0) {
+		if (props.network !== 'other') {
+			if (props.network === 'eth' && props.chain > 0) {
 				property += `:${props.network}@${props.chain}`;
 			} else {
 				property += `:${props.network}`;
 			}
 		} else {
-			if(checkValidity(props.other)) {
-				if(props.chain > 0) {
+			if (checkValidity(props.other)) {
+				if (props.chain > 0) {
 					property += `:${props.other ? props.other.toLowerCase() : props.other}@${props.chain}`;
 				} else {
 					property += `:${props.other ? props.other.toLowerCase() : props.other}`;
@@ -262,7 +281,10 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 	}
 
 	if (props.params.currency.value) {
-		property += `:${props.params.currency.value}`;
+		property += `:${props.params.currency.value.toLowerCase()}`;
+	}
+	if (props.params.fiat.value) {
+		property += `:${props.params.fiat.value.toLowerCase()}`;
 	}
 
 	const content = META_CONTENT[type](props);
@@ -290,7 +312,7 @@ export const generate = (type: ITransitionType, props: any, payload: IPayload[])
 		},
 		{
 			label: 'Html donation button',
-			value: generateHtmlDonationButton(link, props),
+			value: generateHtmlDonationButton(generateLink(payload, props, true), props),
 			previewable: true
 		},
 		{ label: 'Meta tag', note: 'Basic payment instructions only.', value: generateMetaTag(type, props) }
