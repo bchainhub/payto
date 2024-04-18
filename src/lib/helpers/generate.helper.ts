@@ -38,7 +38,7 @@ const generateLink = (payload: IPayload[], props: Record<string, any>, donate: b
 			);
 		}
 
-		if (fiat.value) {
+		if (fiat && fiat.value) {
 			searchParams.set('fiat', fiat.value.toLowerCase());
 		}
 
@@ -283,7 +283,7 @@ const generateMetaTag = (type: ITransitionType, props: Record<string, any>) => {
 	if (props.params.currency.value) {
 		property += `:${props.params.currency.value.toLowerCase()}`;
 	}
-	if (props.params.fiat.value) {
+	if (props.params.fiat && props.params.fiat.value) {
 		property += `:${props.params.fiat.value.toLowerCase()}`;
 	}
 
