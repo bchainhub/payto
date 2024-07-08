@@ -9,6 +9,12 @@ The 'payto' URI scheme builder supports Payments as outlined in [RFC 8905](https
 - [Extended Payto URI](docs/scheme.md)
 - [RFC 8905](https://datatracker.ietf.org/doc/rfc8905/)
 
+## payTo libraries
+
+Typescript / JavaScript:
+
+- [Payto resource locator](https://github.com/bchainhub/payto-rl)
+
 ## Project Initialization
 
 If you're reading this, you've likely already initialized your project. Congratulations!
