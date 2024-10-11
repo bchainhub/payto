@@ -19,7 +19,7 @@
 <div class="flex w-full flex-col">
 	<div
 		use:tabs.list
-		on:select={onSelect}
+		on:change={onSelect}
 		class={join(
 			'[flex-1 mb-4 text-gray-100 font-medium uppercase tracking-wide whitespace-nowrap outline-none ]',
 			'[ aria-[selected=true]:border-be-2 aria-[selected=true]:border-be-green-500 ]',
