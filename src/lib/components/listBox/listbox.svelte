@@ -26,7 +26,7 @@
 		<div class="relative">
 			<button
 				use:listbox.button
-				on:select={onSelect}
+				on:change={onSelect}
 				class={join(
 					'full-width',
 					'[ inline-flex items-center ]',
