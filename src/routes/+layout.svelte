@@ -6,7 +6,7 @@
 <article class="[ flex flex-col ] [ is-full ] [ h-screen justify-between ]">
 	<Header />
 
-	<main class="[ lg:pli-8 ] [ mb-auto ]">
+	<main class="[ lg:pli-8 ] [ mx-auto ]">
 		<slot />
 	</main>
 
