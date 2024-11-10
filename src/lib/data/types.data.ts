@@ -3,7 +3,7 @@ export const TYPES: ITypesObject = {
 		value: 'ican',
 		label: 'ICAN',
 		description: 'International Clearing Account Number',
-		link: 'https://cip.coreblockchain.cc/posts/cip-100.html'
+		link: 'https://cip.coreblockchain.net/cip/cbc/cip-100/'
 	},
 	iban: {
 		value: 'iban',
@@ -26,7 +26,7 @@ export const TYPES: ITypesObject = {
 	pix: {
 		value: 'pix',
 		label: 'PIX',
-		description: 'Brazilian instant payment ecosystem',
+		description: 'Brazilian instant payments',
 		link: 'https://www.bcb.gov.br/en/financialstability/pix_en'
 	},
 	bic: {
