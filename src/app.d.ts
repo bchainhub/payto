@@ -1,6 +1,3 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-// and what to do when importing types
 declare namespace App {
 	// interface Error {}
 	// interface Locals {}
@@ -8,10 +5,18 @@ declare namespace App {
 	// interface Platform {}
 }
 
+declare namespace svelteHTML {
+	interface HTMLAttributes<T> {
+		'on:tabchange'?: (event: CustomEvent<{ selected: string }>) => void;
+		'on:listboxchange'?: (event: CustomEvent<{ selected: { value: string } }>) => void;
+		'on:pointerdown'?: (event: PointerEvent) => void;
+	}
+}
+
 type ITransitionType = 'ican' | 'iban' | 'ach' | 'upi' | 'pix' | 'bic' | 'void';
 
 interface ITypesObject {
-	[K in ITransitionType]: TypeDetails;
+	[K in ITransitionType]: ITypeDetails;
 }
 
 interface ITypeDetails {

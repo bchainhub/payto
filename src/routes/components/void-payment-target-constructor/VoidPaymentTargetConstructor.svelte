@@ -17,7 +17,7 @@
 <div class="[ flex flex-col gap-6 ]" in:fly={{ y: 64 }}>
 	<div class={join('[ flex flex-col items-stretch gap-2 ]')}>
 		<label id="transport-network-label" for="transport-network">Transport Network *</label>
-		<div class="[ flex flex-col items-stetch gap-4 ]">
+		<div class="[ flex flex-col items-stretch gap-4 ]">
 			{#if $constructor.networks.void.transport !== 'other'}
 				<div in:fade>
 					<Listbox bind:value={$constructor.networks.void.transport} items={TRANSPORT.void} />
@@ -101,14 +101,17 @@
 					bind:value={$constructor.networks.void.params.loc.lon}
 				/>
 			</div>
-			<small class="[ -mbs-1 text-gray-400 ]"
-				>Search for the geocordinates - <a
+			<small class="[ -mbs-1 text-gray-400 ]">
+				Search for the geocoordinates -
+				<a
 					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
 					href="https://www.latlong.net/"
 					target="_blank"
-					rel="noreferrer">Latitude & Longitude (DD - Decimal Degrees)</a
-				></small
-			>
+					rel="noreferrer"
+				>
+					Latitude & Longitude (DD - Decimal Degrees)
+				</a>
+			</small>
 		{/if}
 
 		{#if $constructor.networks.void.transport === 'plus'}
@@ -126,14 +129,17 @@
 				style="text-transform: uppercase"
 				bind:value={$constructor.networks.void.params.loc.plus}
 			/>
-			<small class="[ -mbs-1 text-gray-400 ]"
-				>Search for the <a
+			<small class="[ -mbs-1 text-gray-400 ]">
+				Search for the 
+				<a
 					class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
 					href="https://plus.codes/map"
 					target="_blank"
-					rel="noreferrer">Plus Code</a
-				></small
-			>
+					rel="noreferrer"
+				>
+					Plus Code
+				</a>
+			</small>
 		{/if}
 
 		{#if $constructor.networks.void.transport === 'other'}

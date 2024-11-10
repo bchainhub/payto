@@ -3,7 +3,24 @@
 	import { join } from '$lib/helpers/join.helper';
 	import { getFieldGroupContext } from './fieldgroup.context';
 
-	export let options: { name: string, value: string, hasNumberInput?: boolean, disabled?: boolean }[] = [];
+	interface Option {
+		name: string;
+		value: string;
+		hasNumberInput?: boolean;
+		disabled?: boolean;
+	}
+
+	interface Props {
+		options?: Option[];
+		defaultChecked?: string | null;
+		numberValue?: number;
+		numberMin?: number;
+		numberMax?: number;
+		disabled?: boolean;
+		outputValue?: string | null;
+	}
+
+	export let options: Option[] = [];
 	export let defaultChecked: string | null = null;
 	export let numberValue: number = 1;
 	export let numberMin: number = 1;
@@ -11,23 +28,16 @@
 	export let disabled: boolean = false;
 	export let outputValue: string | null = '';
 
-	let _disabled = disabled;
-	$: _disabled = disabled;
+	let internalCheckedValue = writable(defaultChecked || options[0]?.value || '');
+	let checkedValue: string = '';
 
-	let internalCheckedValue = writable(defaultChecked || options[0]?.value);
-	let checkedValue: string;
-	internalCheckedValue.subscribe(val => checkedValue = val);
+	$: internalCheckedValue.subscribe((val) => (checkedValue = val));
 
-	$: {
-		if(checkedValue === 'd' && numberValue > 1) {
-			outputValue = `${numberValue}d`;
-		} else {
-			outputValue = checkedValue;
-		}
-	}
+	$: outputValue = checkedValue === 'd' && numberValue > 1 ? `${numberValue}d` : checkedValue;
 
 	const ctx = getFieldGroupContext();
-	let computedClass: string = join(
+
+	$: computedClass = join(
 		'[ plb-2 pli-3 text-start bg-gray-900 rounded-md border-none caret-teal-500 ]',
 		'[ focus:outline-none focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 focus-visible:ring-offset-green-700 focus-visible:ring-offset-2 ]',
 		'[ w-1/4 sm:text-sm mr-2 ]'
@@ -44,7 +54,7 @@
 					value={option.value}
 					bind:group={checkedValue}
 					on:change={() => internalCheckedValue.set(option.value)}
-					disabled={option.disabled || _disabled} />
+					disabled={option.disabled || disabled} />
 				<span class="ml-1">{option.name}</span>
 			</label>
 		{/each}
@@ -61,7 +71,7 @@
 					min={numberMin}
 					max={numberMax}
 					placeholder={option.name}
-					disabled={checkedValue !== option.value || _disabled} />
+					disabled={checkedValue !== option.value || disabled} />
 			{/if}
 		</div>
 	{/each}

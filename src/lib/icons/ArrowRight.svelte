@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let classValue: string = '';
+	export let rest: Record<string, any> = {};
 </script>
 
 <svg
@@ -10,7 +11,7 @@
 	viewBox="0 0 24 24"
 	xmlns="http://www.w3.org/2000/svg"
 	aria-hidden="true"
-	{...$$restProps}
+	{...rest}
 >
 	<path
 		stroke-linecap="round"

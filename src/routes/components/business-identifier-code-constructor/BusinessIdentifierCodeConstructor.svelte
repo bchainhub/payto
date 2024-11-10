@@ -13,7 +13,7 @@
 <div class="[ flex flex-col gap-6 ]" in:fly={{ y: 64 }}>
 
 	<FieldGroup>
-		<FieldGroupLabel>BIC / SWIFT / ORIC *</FieldGroupLabel>
+		<FieldGroupLabel>BIC / SWIFT / <abbr title="Organization Registry Identifier Code">ORIC</abbr> *</FieldGroupLabel>
 		<FieldGroupText
 			placeholder="e.g. DABADKKK"
 			bind:value={$constructor.networks.bic.bic}

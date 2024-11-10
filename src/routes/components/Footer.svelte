@@ -1,6 +1,6 @@
 <footer class="[ pbe-16 pbs-8 text-gray-200 tracking-wide mx-auto ]">
 	<div class="[ flex flex-col items-center gap-2 ] [ container select-none ]">
-		<strong class="[ text-green-500 text-lg ]">💸 Payto Money</strong>
+		<strong class="[ text-green-500 text-lg ]">💸 PayTo Money</strong>
 
 		<p>A
 			<a
