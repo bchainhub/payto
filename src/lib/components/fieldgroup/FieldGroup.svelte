@@ -4,12 +4,17 @@
 
 	setFieldGroupContext();
 
+	export let children: typeof import('svelte').SvelteComponent | null = null;
+
 	export let classValue: string = '';
 	export let flexType: string = 'flex-col';
 	export let itemPosition: string = 'items-stretch';
-	let computedClass: string = join('[ flex gap-2 ]', itemPosition, flexType, classValue);
+
+	$: computedClass = join('[ flex gap-2 ]', itemPosition, flexType, classValue);
 </script>
 
 <div class={computedClass}>
-	<slot />
+	{#if children}
+		<svelte:component this={children} />
+	{/if}
 </div>

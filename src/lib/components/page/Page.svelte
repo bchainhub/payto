@@ -1,3 +1,7 @@
+<script lang="ts">
+	export let children: typeof import('svelte').SvelteComponent | null = null;
+</script>
+
 <svelte:head>
 	<title>Payto Money — Decentralized transfer of Assets</title>
 	<meta name="description" content="The Payto URI generator transfers Assets decentralized via a link or a redirect." />
@@ -10,5 +14,7 @@
 </svelte:head>
 
 <div>
-	<slot />
+	{#if children}
+		<svelte:component this={children} />
+	{/if}
 </div>

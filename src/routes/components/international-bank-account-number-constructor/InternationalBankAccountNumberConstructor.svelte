@@ -5,7 +5,7 @@
 		FieldGroupLabel,
 		FieldGroupNumber,
 		FieldGroupRadioWithNumber,
-		FieldGroupText
+		FieldGroupText,
 	} from '$lib/components';
 	import { constructor } from '$lib/store/constructor.store';
 	import { fly } from 'svelte/transition';
@@ -20,12 +20,18 @@
 <div class="[ flex flex-col gap-6 ]" in:fly={{ y: 64 }}>
 	<FieldGroup>
 		<FieldGroupLabel>IBAN *</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. IE12BOFI90000112345678" bind:value={$constructor.networks.iban.iban} />
+		<FieldGroupText
+			placeholder="e.g. IE12BOFI90000112345678"
+			bind:value={$constructor.networks.iban.iban}
+		/>
 	</FieldGroup>
 
 	<FieldGroup>
 		<FieldGroupLabel>BIC / SWIFT</FieldGroupLabel>
-		<FieldGroupText placeholder="e.g. DABADKKK" bind:value={$constructor.networks.iban.bic} />
+		<FieldGroupText
+			placeholder="e.g. DABADKKK"
+			bind:value={$constructor.networks.iban.bic}
+		/>
 	</FieldGroup>
 
 	<FieldGroup>
@@ -83,6 +89,7 @@
 				{ name: 'Daily', value: 'd', hasNumberInput: true }
 			]}
 			defaultChecked={$constructor.networks.iban.params.rc.value}
-			bind:outputValue={$constructor.networks.iban.params.rc.value} />
+			bind:outputValue={$constructor.networks.iban.params.rc.value}
+		/>
 	{/if}
 </div>

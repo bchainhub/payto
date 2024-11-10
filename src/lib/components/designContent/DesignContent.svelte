@@ -7,6 +7,7 @@
 		Listbox
 	} from '$lib/components';
 
+	import { derived } from 'svelte/store';
 	import { constructor } from '$lib/store/constructor.store';
 	import { calculateColorDistance } from '$lib/helpers/euclidean-distance.helper';
 	import { join } from '$lib/helpers/join.helper';
@@ -17,7 +18,11 @@
 		{ label: 'Aztec', value: 'aztec', ticker: 'Aztec' }
 	];
 
-	$: distance = Math.floor(calculateColorDistance($constructor.design.colorF || '#192a14', $constructor.design.colorB || '#77bc65'));
+	const distance = derived(constructor, $constructor =>
+		Math.floor(
+			calculateColorDistance($constructor.design.colorF || '#192a14', $constructor.design.colorB || '#77bc65')
+		)
+	);
 </script>
 
 <div class="[ flex flex-col gap-6 ]">
@@ -41,7 +46,10 @@
 
 	<div class="[ flex flex-col gap-6 ]">Theme setup:</div>
 
-	<div>Current Color Euclidean distance: <span class:text-red-500={distance < 100}>{distance}</span></div>
+	<div>
+		Current Color Euclidean distance:
+		<span class:text-red-500={$distance < 100}>{$distance}</span>
+	</div>
 
 	<FieldGroup flexType="row" itemPosition="items-center">
 		<FieldGroupColorPicker
@@ -57,11 +65,15 @@
 		/>
 	</FieldGroup>
 
-	<div class="[ flex flex-col ]"><small class="[ -mb-1 text-gray-400 ]">Note: Similar Colors will not be accepted - the minimum Euclidean distance is 100.</small></div>
+	<div class="[ flex flex-col ]">
+		<small class="[ -mb-1 text-gray-400 ]">
+			Note: Similar Colors will not be accepted - the minimum Euclidean distance is 100.
+		</small>
+	</div>
 
 	<FieldGroup>
 		<FieldGroupLabel>Barcode type (QR code as default)</FieldGroupLabel>
-		<Listbox bind:value={$constructor.design.barcode} items={barcodeTypes} />
+		<Listbox id="barcode-list" bind:value={$constructor.design.barcode} items={barcodeTypes} />
 	</FieldGroup>
 
 	<button
@@ -76,5 +88,4 @@
 	>
 		Clear
 	</button>
-
 </div>

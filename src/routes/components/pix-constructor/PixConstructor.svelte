@@ -122,6 +122,7 @@
 				{ name: 'Daily', value: 'd', hasNumberInput: true }
 			]}
 			defaultChecked={$constructor.networks.pix.params.rc.value}
-			bind:outputValue={$constructor.networks.pix.params.rc.value} />
+			bind:outputValue={$constructor.networks.pix.params.rc.value}
+		/>
 	{/if}
 </div>

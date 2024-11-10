@@ -13,7 +13,7 @@
 
 	function handleRecurringChange() {
 		if (!$constructor.networks.upi.isRc) {
-			$constructor.networks.upi.params!.rc.value = undefined;
+			$constructor.networks.upi.params.rc.value = undefined;
 		}
 	}
 </script>
@@ -82,6 +82,7 @@
 				{ name: 'Daily', value: 'd', hasNumberInput: true }
 			]}
 			defaultChecked={$constructor.networks.upi.params.rc.value}
-			bind:outputValue={$constructor.networks.upi.params.rc.value} />
+			bind:outputValue={$constructor.networks.upi.params.rc.value}
+		/>
 	{/if}
 </div>

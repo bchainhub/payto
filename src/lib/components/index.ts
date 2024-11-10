@@ -4,6 +4,8 @@ export { Box, BoxTitle, BoxContent } from './box';
 export { Row } from './row';
 export { Listbox } from './listBox';
 export { Tabs } from './tabs';
+export { toast } from './toast';
+export { default as Toast } from './toast/toast.svelte';
 export {
 	FieldGroup,
 	FieldGroupColorPicker,

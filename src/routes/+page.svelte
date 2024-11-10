@@ -1,90 +1,59 @@
 <script lang="ts">
-	import toast, { Toaster } from 'svelte-french-toast';
-
-	import { Row, Box, BoxContent, BoxTitle, Page, Tabs, WalletCard, DesignContent } from '$lib/components';
-
+	import { onMount } from 'svelte';
+	import '../app.postcss';
 	import {
-		AutomatedClearingHouseConstructor,
-		InternationalCryptoAccountNumberConstructor,
-		BusinessIdentifierCodeConstructor,
-		InternationalBankAccountNumberConstructor,
-		UnifiedPaymentsInterfaceConstructor,
-		PixConstructor,
-		VoidPaymentTargetConstructor
-	} from './components';
+		Row, Box, BoxContent, BoxTitle, Page, Tabs, Toast, WalletCard, DesignContent
+	} from '$lib/components';
 
 	import { TYPES } from '$lib/data/types.data';
 	import { getObjectByType } from '$lib/helpers/get-object-by-type.helper';
 	import { join } from '$lib/helpers/join.helper';
 	import { Icon } from '$lib/icons';
 	import { constructor } from '$lib/store/constructor.store';
+	import { derived, get, writable } from 'svelte/store';
+	import { toast } from '$lib/components/toast';
 
-	let type: ITransitionType = 'ican';
-	let designEnabled: boolean = false;
-	$: outputs = constructor.build(type);
-	$: currentName = getObjectByType(TYPES, type).label;
-	$: currentSentence = '';
-	$: currentLink = '';
-	$: currentShow = false;
-	$: if (currentName) {
-		currentSentence = `What is ${currentName}?`;
-		currentLink = getObjectByType(TYPES, type)?.link || '';
-		currentShow = true;
-	}
-
-	const handleOnCopy = async (ev: any) => {
-		await window.navigator.clipboard.writeText(ev.currentTarget.dataset.value);
-
-		toast.success('Copied to clipboard', {
-			className: '!text-gray-50 !bg-gray-700',
-			style: '--color-background: #374151'
-		});
-	};
-
-	const paymentTypes = {
-		ican: {
-			label: getObjectByType(TYPES, 'ican')!.label,
-			component: InternationalCryptoAccountNumberConstructor
-		},
-		iban: {
-			label: getObjectByType(TYPES, 'iban')!.label,
-			component: InternationalBankAccountNumberConstructor
-		},
-		ach: {
-			label: getObjectByType(TYPES, 'ach')!.label,
-			component: AutomatedClearingHouseConstructor
-		},
-		upi: {
-			label: getObjectByType(TYPES, 'upi')!.label,
-			component: UnifiedPaymentsInterfaceConstructor
-		},
-		pix: {
-			label: getObjectByType(TYPES, 'pix')!.label,
-			component: PixConstructor
-		},
-		bic: {
-			label: getObjectByType(TYPES, 'bic')!.label,
-			component: BusinessIdentifierCodeConstructor
-		},
-		void: {
-			label: getObjectByType(TYPES, 'void')!.label,
-			component: VoidPaymentTargetConstructor
+	let type = writable<ITransitionType>('ican');
+	let designEnabled = writable(false);
+	let currentSentence = writable('');
+	let currentLink = writable('');
+	let currentShow = writable(false);
+	let outputs = derived(
+		[type, constructor],
+		([$type, $constructor]) => {
+			const result = get(constructor.build($type));
+			return Array.isArray(result) ? result : [];
 		}
+	);
+
+	onMount(() => {
+		const currentName = getObjectByType(TYPES, $type)?.label;
+		if (currentName) {
+			currentSentence.set(`What is ${currentName}?`);
+			currentLink.set(getObjectByType(TYPES, $type)?.link || '');
+			currentShow.set(true);
+		}
+	});
+
+	const handleOnCopy = async (ev: Event) => {
+		const value = (ev.currentTarget as HTMLButtonElement).dataset.value!;
+		await window.navigator.clipboard.writeText(value);
+
+		toast({
+			message: 'Copied to clipboard',
+			type: 'success'
+		});
 	};
 </script>
 
-<Toaster />
+<Toast />
 
 <Page>
 	<Row>
 		<Box>
 			<BoxTitle>Payment Constructor</BoxTitle>
-
 			<BoxContent>
-				<Tabs
-					bind:selectedTab={type}
-					config={paymentTypes}
-				/>
+				<Tabs bind:selectedTab={$type} />
 				<button
 					class={join(
 						'[ is-full bs-12 mbs-auto plb-2 pli-3 text-center text-white border border-gray-700 bg-gray-700 rounded-md transition-all duration-200 outline-none ]',
@@ -93,25 +62,22 @@
 						'[ sm:text-sm ]'
 					)}
 					type="button"
-					on:pointerdown={() => constructor.reset(type)}
+					on:click={() => constructor.reset($type)}
 				>
 					Clear
 				</button>
 			</BoxContent>
 		</Box>
 
-		<Icon.Convert
-			class="[ bs-10 is-10 self-center text-green-500 rotate-90 ] [ lg:block lg:rotate-0 ]"
-		/>
+		<Icon.Convert classValue="[ bs-10 is-10 self-center text-green-500 rotate-90 ] [ lg:block lg:rotate-0 ]" />
 
 		<Box>
 			<BoxTitle>Integrations</BoxTitle>
-
 			<BoxContent>
 				<div class="[ flex flex-col gap-6 ]">
 					{#each $outputs as output, index}
-						<div class="[ flex flex-col items-stretch gap-2 ]">
-							<label for={'value of ' + index}>{output.label}</label>
+						<div class="flex flex-col gap-2">
+							<label for={`item_${index}`}>{output.label}</label>
 							<div
 								class={join(
 									'[ flex items-center justify-between ]',
@@ -127,7 +93,7 @@
 									type="text"
 									value={output.value}
 									readonly
-									id={'value of ' + index}
+									id={`item_${index}`}
 								/>
 								<button
 									class={join(
@@ -138,7 +104,7 @@
 									type="button"
 									title="Copy to clipboard"
 									data-value={output.value}
-									on:pointerdown={handleOnCopy}
+									on:click={handleOnCopy}
 								>
 									<svg
 										class={join('[ bs-5 is-5 ]')}
@@ -159,7 +125,7 @@
 							</div>
 
 							{#if output.previewable}
-								<div class="[ flex flex-col items-stretch gap-3 mb-1 ]">
+								<div class="[ flex flex-col items-stretch gap-2 mb-2 ]">
 									<label class="[ text-gray-300 text-sm ]" for={'previewOf' + index}>
 										Preview
 									</label>
@@ -168,8 +134,8 @@
 							{/if}
 
 							{#if output.note}
-								<div class="[ flex flex-col items-stretch gap-3 mb-3 ]">
-									<small class="[ -mb-1 text-gray-400 ]" id={'noteOf' + index}>
+								<div class="[ flex flex-col items-stretch gap-2 mb-2 ]">
+									<small class="[ text-gray-400 ]" id={'noteOf' + index}>
 										{output.note}
 									</small>
 								</div>
@@ -186,23 +152,23 @@
 				<label for="designCheckbox" class="mr-2">Design</label>
 				<input
 					type="checkbox"
-					bind:checked={designEnabled}
+					bind:checked={$designEnabled}
 					id="designCheckbox"
 				/>
 			</BoxTitle>
-			{#if designEnabled}
-			<BoxContent>
-				<div class="flex flex-col gap-x-6 gap-y-4 md:flex-row">
-					<div class="w-full md:w-1/2">
-						<WalletCard
-							bind:type={type}
-						/>
+			{#if $designEnabled}
+				<BoxContent>
+					<div class="flex flex-col gap-x-6 gap-y-4 md:flex-row">
+						<div class="w-full md:w-1/2">
+							<WalletCard
+								bind:type={$type}
+							/>
+						</div>
+						<div class="w-full md:flex-grow">
+							<DesignContent />
+						</div>
 					</div>
-					<div class="w-full md:flex-grow">
-						<DesignContent />
-					</div>
-				</div>
-			</BoxContent>
+				</BoxContent>
 			{/if}
 		</Box>
 	</Row>
@@ -225,13 +191,13 @@
 							rel="noreferrer"
 						>Documentation</a>.
 					</div>
-					{#if currentShow}
+					{#if $currentShow}
 						<div>
-							<span class="mr-1">{currentSentence}</span>
+							<span class="mr-1">{$currentSentence}</span>
 							<span>Read more
 								<a
 									class="[ transition-all duration-200 ] [ visited:text-gray-200 hover:text-gray-300 ]"
-									href={currentLink}
+									href={$currentLink}
 									target="_blank"
 									rel="noreferrer"
 								>here</a>.

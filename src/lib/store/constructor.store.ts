@@ -108,7 +108,6 @@ const INITIAL_STATE: IComplexState = {
 			}
 		},
 	},
-	// Design parameters
 	design: {
 		org: undefined,
 		item: undefined,

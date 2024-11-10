@@ -16,9 +16,17 @@
 			$constructor.networks.ach.params.rc.value = undefined;
 		}
 	}
+
+	function handleTabChange(event: CustomEvent<{ selected: string }>) {
+		console.log('Tab changed:', event.detail.selected);
+	}
+
+	function handleListboxChange(event: CustomEvent<{ selected: { value: string } }>) {
+		console.log('Listbox selection changed:', event.detail.selected);
+	}
 </script>
 
-<div class="[ flex flex-col gap-6 ]" in:fly={{ y: 64 }}>
+<div class="[ flex flex-col gap-6 ]" in:fly={{ y: 64 }} on:tabchange={handleTabChange}>
 	<FieldGroup>
 		<FieldGroupLabel>Account Number *</FieldGroupLabel>
 		<FieldGroupText
@@ -83,6 +91,8 @@
 				{ name: 'Daily', value: 'd', hasNumberInput: true }
 			]}
 			defaultChecked={$constructor.networks.ach.params.rc.value}
-			bind:outputValue={$constructor.networks.ach.params.rc.value} />
+			bind:outputValue={$constructor.networks.ach.params.rc.value}
+			on:listboxchange={handleListboxChange}
+		/>
 	{/if}
 </div>
