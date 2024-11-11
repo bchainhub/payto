@@ -2,7 +2,7 @@ export const TYPES: ITypesObject = {
 	ican: {
 		value: 'ican',
 		label: 'ICAN',
-		description: 'International Clearing Account Number',
+		description: 'International Crypto Account Number',
 		link: 'https://cip.coreblockchain.net/cip/cbc/cip-100/'
 	},
 	iban: {
