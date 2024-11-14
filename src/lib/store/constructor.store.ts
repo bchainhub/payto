@@ -12,6 +12,7 @@ const INITIAL_STATE: IComplexState = {
 			chain: undefined,
 			isSplit: false,
 			isFiat: false,
+			isSwap: false,
 			isDl: false,
 			isRc: false,
 			params: {
@@ -20,6 +21,7 @@ const INITIAL_STATE: IComplexState = {
 				dl: { value: undefined },
 				rc: { value: undefined },
 				fiat: { value: undefined },
+				swap: { value: undefined },
 				split: { value: undefined, isPercent: false, address: undefined },
 			}
 		},

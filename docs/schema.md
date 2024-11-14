@@ -167,6 +167,24 @@ Supported payment types:
 
 Example: `payto://xcb/${address}?amount=${asset_code}:${amount}&split=p:${split}@${split_address}`
 
+### Swap
+
+The **Swap** functionality in the PAYTO URI scheme enables automatic asset conversion during ICAN payments. By including the `swap` parameter in the URI, users can specify an asset code to which the payment amount should be automatically converted. This feature facilitates seamless transactions where the recipient prefers to receive a different asset than the one sent by the payer.
+
+For instance, a URI formatted as `payto://xcb/${address}?swap=${asset_code}` will instruct the payment system to convert the incoming asset to the specified `asset_code` before completing the transaction. The conversion rate and fees are determined at the time of the swap, ensuring that the recipient receives the specified asset in their preferred form.
+
+#### Supported use case
+
+- Simplifies payments by enabling direct asset conversion.
+- Ensures recipients can receive payments in their desired asset.
+- Reduces manual conversion steps post-payment.
+
+Example:
+
+```txt
+payto://xcb/recipientAddress?swap=ctn
+```
+
 ### IBAN
 
 The IBAN field specifies the IBAN for the transaction. The IBAN is the International Bank Account Number. The IBAN is required field.
