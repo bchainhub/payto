@@ -29,6 +29,12 @@
 		}
 	}
 
+	function handleSwapChange() {
+		if (!$constructor.networks.ican.isSwap) {
+			$constructor.networks.ican.params.swap.value = undefined;
+		}
+	}
+
 	function handleSplitChange() {
 		if (!$constructor.networks.ican.isSplit) {
 			Object.assign($constructor.networks.ican.params.split, { isPercent: undefined, value: undefined, address: undefined });
@@ -145,6 +151,29 @@
 				placeholder="e.g. USD"
 				classValue="uppercase"
 				bind:value={$constructor.networks.ican.params.fiat.value}
+			/>
+		</FieldGroup>
+	{/if}
+
+	<FieldGroup>
+		<div class="flex items-center">
+			<input
+				type="checkbox"
+				bind:checked={$constructor.networks.ican.isSwap}
+				id="swapCheckbox"
+				on:change={handleSwapChange}
+			/>
+			<label for="swapCheckbox" class="ml-2">Swap</label>
+		</div>
+	</FieldGroup>
+
+	{#if $constructor.networks.ican.isSwap}
+		<FieldGroup>
+			<FieldGroupLabel>Asset to receive</FieldGroupLabel>
+			<FieldGroupText
+				placeholder="e.g. USDC"
+				classValue="uppercase"
+				bind:value={$constructor.networks.ican.params.swap.value}
 			/>
 		</FieldGroup>
 	{/if}

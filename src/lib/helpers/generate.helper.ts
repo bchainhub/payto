@@ -13,7 +13,7 @@ const generateLink = (payload: IPayload[], props: Record<string, any>, donate: b
 		.filter((payload) => (payload.value !== undefined || payload.query === true))
 		.reduce((acc, payload) => acc.concat('/', payload.value || (payload.placeholder ? payload.placeholder : '')), 'payto:/');
 
-	const { amount, currency, design, split, fiat, ...rest } = props.params;
+	const { amount, currency, design, split, fiat, swap, ...rest } = props.params;
 	const validParams = Object.entries<{ value: string | undefined; mandatory?: boolean }>(rest)
 		.filter(([_, param]) => param.mandatory || Boolean(param.value))
 		.map(([key, param]) => [kebabize(key), param.value]);
@@ -40,6 +40,10 @@ const generateLink = (payload: IPayload[], props: Record<string, any>, donate: b
 
 		if (fiat && fiat.value) {
 			searchParams.set('fiat', fiat.value.toLowerCase());
+		}
+
+		if (swap && swap.value) {
+			searchParams.set('swap', swap.value.toLowerCase());
 		}
 
 		// Split transformer
