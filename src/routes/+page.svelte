@@ -103,6 +103,7 @@
 									)}
 									type="button"
 									title="Copy to clipboard"
+									aria-label="Copy to clipboard"
 									data-value={output.value}
 									on:click={handleOnCopy}
 								>

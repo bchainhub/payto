@@ -1,6 +1,8 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import { join } from '$lib/helpers/join.helper';
-	export let children: typeof import('svelte').SvelteComponent | null = null;
+
+	export let children: Component | null = null;
 </script>
 
 <div

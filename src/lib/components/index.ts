@@ -11,7 +11,7 @@ export {
 	FieldGroupAppendix,
 	FieldGroupRadioWithNumber
 } from './field-group';
-export { Listbox } from './list-box';
+export { ListBox } from './list-box';
 export { Page } from './page';
 export { Row } from './row';
 export { Tabs } from './tabs';
