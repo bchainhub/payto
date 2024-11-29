@@ -31,6 +31,7 @@
 	<button
 		id={id}
 		on:click={toggle}
+		aria-label="Toggle dropdown"
 		class={join(
 			'[ inline-flex items-center justify-between ]',
 			'[ w-full px-3 py-2 bg-gray-900 text-white rounded-md cursor-pointer ]',
@@ -61,6 +62,7 @@
 				<li>
 					<button
 						type="button"
+						aria-label={item.label}
 						on:click={() => select(item)}
 						on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && select(item)}
 						class="flex items-center w-full px-3 py-2 hover:bg-gray-700"

@@ -1,7 +1,8 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import { getFieldGroupContext } from './fieldgroup.context';
 
-	export let children: typeof import('svelte').SvelteComponent | null = null;
+	export let children: Component | null = null;
 
 	const ctx = getFieldGroupContext();
 </script>

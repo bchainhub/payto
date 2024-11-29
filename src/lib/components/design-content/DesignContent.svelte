@@ -4,7 +4,7 @@
 		FieldGroupColorPicker,
 		FieldGroupLabel,
 		FieldGroupText,
-		Listbox
+		ListBox
 	} from '$lib/components';
 
 	import { derived } from 'svelte/store';
@@ -73,7 +73,7 @@
 
 	<FieldGroup>
 		<FieldGroupLabel>Barcode type (QR code as default)</FieldGroupLabel>
-		<Listbox id="barcode-list" bind:value={$constructor.design.barcode} items={barcodeTypes} />
+		<ListBox id="barcode-list" bind:value={$constructor.design.barcode} items={barcodeTypes} />
 	</FieldGroup>
 
 	<button

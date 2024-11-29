@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { join } from '$lib/helpers/join.helper';
-	import { Listbox } from '$lib/components';
+	import { ListBox } from '$lib/components';
 	import { fade } from 'svelte/transition';
 	import { getObjectByType } from '$lib/helpers/get-object-by-type.helper';
 	import { TYPES } from '$lib/data/types.data';
@@ -43,7 +43,7 @@
 	<label id="payment-type-label" for="payment-type" class="font-bold">Payment Type</label>
 	<div class="[ flex flex-col items-stretch gap-4 ]">
 		<div in:fade>
-			<Listbox id="payment-type" bind:value={selectedTab} items={listboxItems} />
+			<ListBox id="payment-type" bind:value={selectedTab} items={listboxItems} />
 		</div>
 	</div>
 

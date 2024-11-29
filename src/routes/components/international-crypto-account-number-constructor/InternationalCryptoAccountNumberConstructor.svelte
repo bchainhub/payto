@@ -7,7 +7,7 @@
 		FieldGroupDateTime,
 		FieldGroupText,
 		FieldGroupRadioWithNumber,
-		Listbox
+		ListBox
 	} from '$lib/components';
 
 	import { TRANSPORT } from '$lib/data/transports.data';
@@ -71,13 +71,14 @@
 		<div class="[ flex flex-col items-stretch gap-4 ]">
 			{#if $constructor.networks.ican.network !== 'other'}
 				<div in:fade>
-					<Listbox id="transport-network" bind:value={$constructor.networks.ican.network} items={TRANSPORT.ican} />
+					<ListBox id="transport-network" bind:value={$constructor.networks.ican.network} items={TRANSPORT.ican} />
 				</div>
 			{:else}
 				<div class="[ flex items-center relative ]" in:fade>
 					<button
 						class="[ absolute mli-3 p-2 text-gray-50 bg-gray-700 rounded-full outline-none transition-all ]"
 						title="Back to network menu options"
+						aria-label="Back to network menu options"
 						on:pointerdown={() => ($constructor.networks.ican.network = 'xcb')}
 					>
 						<svg class="[ bs-4 is-4 ]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

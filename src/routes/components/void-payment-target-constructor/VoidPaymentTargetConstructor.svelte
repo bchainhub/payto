@@ -5,7 +5,7 @@
 		FieldGroupLabel,
 		FieldGroupNumber,
 		FieldGroupText,
-		Listbox
+		ListBox
 	} from '$lib/components';
 
 	import { TRANSPORT } from '$lib/data/transports.data';
@@ -20,7 +20,7 @@
 		<div class="[ flex flex-col items-stretch gap-4 ]">
 			{#if $constructor.networks.void.transport !== 'other'}
 				<div in:fade>
-					<Listbox bind:value={$constructor.networks.void.transport} items={TRANSPORT.void} />
+					<ListBox bind:value={$constructor.networks.void.transport} items={TRANSPORT.void} />
 				</div>
 			{/if}
 			{#if $constructor.networks.void.transport === 'other'}
@@ -33,6 +33,7 @@
 						)}
 						type="button"
 						title="Back to network menu options"
+						aria-label="Back to network menu options"
 						on:pointerdown={() => ($constructor.networks.void.transport = 'geo')}
 					>
 						<svg
