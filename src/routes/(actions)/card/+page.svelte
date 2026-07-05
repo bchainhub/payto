@@ -19,6 +19,9 @@
 	const FORM_DATA_TTL_MS = 5 * 60 * 1000;
 	const digitsRegex = /\D/g;
 	const coreApiBaseUrl = (env.PUBLIC_COREAPI_URL || 'https://core.exposed').replace(/\/+$/, '');
+	const CRYPTOCARD_NOT_FOUND_MESSAGE =
+		'The requested CryptoCard was not found. It may have a different name, or the service is not bound.';
+	const CRYPTOCARD_SERVICE_UNAVAILABLE_MESSAGE = 'Service is unavailable.';
 
 	interface FragmentParsed {
 		number: string | null;
@@ -259,8 +262,8 @@
 		isResolving = true;
 
 		try {
-			const response = await fetch(`${coreApiBaseUrl}/obp/v6.0.0/cards/tokenizer/resolve/public`, {
-				method: 'POST',
+			const response = await fetch(`${coreApiBaseUrl}/obp/v6.0.0/cards/tokenizer/resolve`, {
+				method: 'QUERY',
 				headers: {
 					'Content-Type': 'application/json'
 				},
@@ -271,20 +274,24 @@
 				})
 			});
 
-			const payload = await response.json();
+			const payload = await response.json().catch(() => null);
 			if (!response.ok) {
-				submitError = payload?.error || 'Failed to resolve Core ID.';
+				const apiMessage = `${payload?.error || ''} ${payload?.message || ''}`.toLowerCase();
+				submitError =
+					response.status === 404 || apiMessage.includes('not found')
+						? CRYPTOCARD_NOT_FOUND_MESSAGE
+						: CRYPTOCARD_SERVICE_UNAVAILABLE_MESSAGE;
 				return;
 			}
 
 			if (!payload?.coreId) {
-				submitError = 'Resolved Core ID was not returned.';
+				submitError = CRYPTOCARD_NOT_FOUND_MESSAGE;
 				return;
 			}
 
 			window.location.href = `/://xcb/${payload.coreId}`;
 		} catch (error) {
-			submitError = error instanceof Error ? error.message : 'Failed to resolve Core ID.';
+			submitError = CRYPTOCARD_SERVICE_UNAVAILABLE_MESSAGE;
 		} finally {
 			isResolving = false;
 		}
