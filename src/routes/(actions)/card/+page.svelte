@@ -494,10 +494,9 @@
 			>
 				<p class="mb-1"><strong>Card Tokenization Toolset</strong></p>
 				<ul class="list-disc list-inside space-y-1">
-					<li>If the card is not registered, your funds are returned back.</li>
-					<li>If supported, crypto is converted to fiat automatically.</li>
-					<li>If conversion is not available or fails, funds are kept in digital form.</li>
-					<li>To hide * digits, replace them with 0. Never share the full card number!</li>
+					<li>If the card is not pinned, the funds are returned to the sender.</li>
+					<li>When supported, selected assets can be topped up as fiat.</li>
+					<li>To hide private digits, replace them with 0. Never share the full card number.</li>
 				</ul>
 			</div>
 		</div>
