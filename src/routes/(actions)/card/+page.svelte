@@ -13,7 +13,6 @@
 	} from '$lib/helpers/cryptocard.helper';
 	import type { CardBrandDefinition } from '$lib/helpers/cryptocard.helper';
 
-	const experimental = true;
 	const MIN_CARD_DIGITS = 6;
 	const MAX_CARD_DIGITS = 19;
 	const FORM_DATA_TTL_MS = 5 * 60 * 1000;
@@ -340,13 +339,6 @@
 <div class="min-h-screen p-4 sm:p-6 lg:p-8">
 	<div class="w-full max-w-md mx-auto">
 		<div class="space-y-6">
-			{#if experimental}
-				<div
-					class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 text-sm text-yellow-200"
-				>
-					⚗️ Experimental feature - this functionality is in alpha testing.
-				</div>
-			{/if}
 			<!-- Credit Card UI -->
 			<div
 				class="relative w-full h-56 sm:h-60 mx-auto rounded-2xl shadow-2xl bg-gradient-to-br from-blue-500 to-purple-600 overflow-hidden"

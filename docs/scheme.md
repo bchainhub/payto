@@ -35,7 +35,7 @@ path = recipient locator
 query = optional key/value parameters
 
 transactional fields:
-  amount, fiat, dl, rc, split, swap, receiver-name, sender-name, message, reference, id, loc, bic,
+  amount, fiat, dl, rc, split, swap, receiver-name, sender-name, message, receipt, reference, id, loc, bic,
   bank-name, bank-address, corr-bank-bic, corr-bank-name, corr-bank-address
 
 presentation / UX fields:
@@ -90,7 +90,7 @@ opts      = opt *( "&" opt )
 opt       = opt-name "=" opt-value
 
 opt-name  = "amount" / "fiat" / "dl" / "rc" / "split" / "swap" /
-            "receiver-name" / "sender-name" / "message" / "id" /
+            "receiver-name" / "sender-name" / "message" / "receipt" / "id" /
             "org" / "item" / "color-f" / "color-b" / "barcode" /
             "rtl" / "lang" / "mode" / "donate" /
             authority-specific-opt
@@ -358,6 +358,7 @@ These parameters affect the payment itself.
 | `receiver-name` | string | recipient display label | `Acme GmbH` |
 | `sender-name` | string | sender display label | `John Doe` |
 | `message` | string | payment memo / reference | `Invoice 123` |
+| `receipt` | string | destination for a payment receipt, such as an email address or SMS-capable phone number | `payments@example.com`, `+421900123456` |
 | `reference` | string | shared or bank reference label | `Shared-001` |
 | `id` | string | external transaction identifier | `INV-2025-0001` |
 | `loc` | string | VOID location value | `48.8582,2.2945` |
@@ -517,6 +518,17 @@ Example:
 
 ```txt
 payto://iban/DE89...3704?message=Invoice%20123
+```
+
+### `receipt`
+
+Optional destination to which a payment receipt may be sent. Space characters are removed from the value. The remaining value is an opaque string so it can hold an email address, an SMS-capable phone number, or another receipt-delivery identifier supported by the payment provider. Clients must not assume the value is verified, and providers that do not support receipt delivery should ignore it.
+
+Examples:
+
+```txt
+payto://iban/DE89...3704?receipt=payments%40example.com
+payto://iban/DE89...3704?receipt=%2B421900123456
 ```
 
 ### `reference`
