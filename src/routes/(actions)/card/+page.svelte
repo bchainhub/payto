@@ -18,8 +18,8 @@
 	const FORM_DATA_TTL_MS = 5 * 60 * 1000;
 	const digitsRegex = /\D/g;
 	const coreApiBaseUrl = (env.PUBLIC_COREAPI_URL || 'https://core.exposed').replace(/\/+$/, '');
-	const CRYPTOCARD_NOT_FOUND_MESSAGE =
-		'The requested CryptoCard was not found. It may have a different name, or the service is not bound.';
+	const CRYPTOCARD_NOT_FOUND_MESSAGE = 'Pinned card not found. Check your details.';
+	const TOO_MANY_REQUESTS_MESSAGE = 'Too many requests. Please try again later.';
 	const CRYPTOCARD_SERVICE_UNAVAILABLE_MESSAGE = 'Service is unavailable.';
 
 	interface FragmentParsed {
@@ -276,10 +276,18 @@
 			const payload = await response.json().catch(() => null);
 			if (!response.ok) {
 				const apiMessage = `${payload?.error || ''} ${payload?.message || ''}`.toLowerCase();
-				submitError =
-					response.status === 404 || apiMessage.includes('not found')
-						? CRYPTOCARD_NOT_FOUND_MESSAGE
-						: CRYPTOCARD_SERVICE_UNAVAILABLE_MESSAGE;
+				if (
+					response.status === 404 ||
+					apiMessage.includes('not found') ||
+					apiMessage.includes('execution reverted') ||
+					apiMessage.includes('empty core id')
+				) {
+					submitError = CRYPTOCARD_NOT_FOUND_MESSAGE;
+				} else if (response.status === 429) {
+					submitError = TOO_MANY_REQUESTS_MESSAGE;
+				} else {
+					submitError = CRYPTOCARD_SERVICE_UNAVAILABLE_MESSAGE;
+				}
 				return;
 			}
 
